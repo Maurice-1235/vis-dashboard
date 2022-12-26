@@ -8,3 +8,6 @@ TODO:
 - fix tooltip position
 - 降维
 - 平行坐标
+
+（scatterplot只跑出了一个点是因为传的数据不对
+（另外heatmap的数据和uncertainty rank的那个bar目前都是采用random形式
