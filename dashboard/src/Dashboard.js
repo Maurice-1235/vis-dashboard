@@ -16,6 +16,12 @@ import GTranslateIcon from '@mui/icons-material/GTranslate';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import {ForceGraph} from './CasualGraph/ForceGraph'
 import data from './data/data.json';
+import data2 from './data/data2.json';
+import { Rank } from './Uncertainty_rank/Rank';
+import ViolinPlot from './Validation_view/Violinplot';
+import { Heatmap } from './Validation_view/Heatmap/Heatmap';
+import { random_data } from './data/data'; 
+import { Scatterplot } from './Validation_view/Scatterplot/Scatterplot';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -23,7 +29,7 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: 'center',
   color: theme.palette.text.secondary,
 }));
-
+let edgeCount = 1
 export default function AutoGrid() {
   
   return (
@@ -52,9 +58,9 @@ export default function AutoGrid() {
         </Toolbar>
       </Container>
     </AppBar>
-    <Box sx={{ flexGrow: 2,m:1,mt:8 }}>
+    <Box sx={{ flexGrow: 1,m:0,mt:8 }}>
       <Grid container spacing={0}>
-        <Grid xs={6}>
+        <Grid xs={4}>
 
           <Item>
             Casual Graph
@@ -67,6 +73,8 @@ export default function AutoGrid() {
             {/* <Transfer></Transfer> */}
             Uncertainty Rank
           <hr />
+         <Typography> #Edges:{edgeCount}</Typography>
+          <Rank A={"A"} B={"B"} x={0} y={10}></Rank>
           </Item>
         </Grid>
         <Grid xs>
@@ -74,6 +82,10 @@ export default function AutoGrid() {
             {/* <File></File> */}
             Validation View
           <hr />
+          <ViolinPlot></ViolinPlot>
+          <hr></hr>
+          <Heatmap data={random_data} width={700} height={400} />
+          <Scatterplot data={data2} width={700} height={400} />
           </Item>
         </Grid>
       </Grid>
