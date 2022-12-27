@@ -13,8 +13,8 @@ export const Tooltip = ({ interactionData, width, height }) => {
         width,
         height,
         position: "absolute",
-        top: 0,
-        left: 0,
+        top: 380,
+        left: 800,
         pointerEvents: "none",
       }}
     >

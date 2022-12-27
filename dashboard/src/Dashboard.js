@@ -29,8 +29,19 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: 'center',
   color: theme.palette.text.secondary,
 }));
-let edgeCount = 1
+let edgeCount = 5
 export default function AutoGrid() {
+  const numbers = [1,2,3,4,5];
+  const total = 250;
+  let random_number = [];
+  for (let x = 0; x < edgeCount; x++) {
+      random_number.push(Math.floor(Math.random() * total + 1));
+      console.log(random_number[x]);
+  }
+  const listRanks = numbers.map((number)=>
+    
+    <Rank A={"A"} B={"B"} x={0} y={5} full={total} data={random_number[number-1]}></Rank>
+  )
   
   return (
     <>
@@ -58,38 +69,42 @@ export default function AutoGrid() {
         </Toolbar>
       </Container>
     </AppBar>
-    <Box sx={{ flexGrow: 1,m:0,mt:8 }}>
+     <Box sx={{ flexGrow: 0,m:0,mt:8 }}>
       <Grid container spacing={0}>
         <Grid xs={4}>
 
           <Item>
             Casual Graph
-          <hr />
-          <ForceGraph linksData={data.links} nodesData={data.nodes} />
-          </Item>
+          <hr /> 
+        
+         </Item> 
+         <ForceGraph linksData={data.links} nodesData={data.nodes} />
         </Grid>
         <Grid xs={3}>
-          <Item>
+          <Item> 
             {/* <Transfer></Transfer> */}
-            Uncertainty Rank
+             Uncertainty Rank
           <hr />
          <Typography> #Edges:{edgeCount}</Typography>
-          <Rank A={"A"} B={"B"} x={0} y={10}></Rank>
+          {/* rank */}
+          {listRanks}
+          {/* <Rank A={"A"} B={"B"} x={0} y={10}></Rank> */}
           </Item>
         </Grid>
         <Grid xs>
           <Item>
             {/* <File></File> */}
-            Validation View
+             Validation View
           <hr />
           <ViolinPlot></ViolinPlot>
-          <hr></hr>
-          <Heatmap data={random_data} width={700} height={400} />
-          <Scatterplot data={data2} width={700} height={400} />
+          {/* <hr></hr> */}
+          <Heatmap data={random_data} width={500} height={300} />
+          
+          <Scatterplot data={data2} width={500} height={300} />
           </Item>
         </Grid>
       </Grid>
-    </Box>
-    </>
+        </Box>
+    </>  
   );
 }

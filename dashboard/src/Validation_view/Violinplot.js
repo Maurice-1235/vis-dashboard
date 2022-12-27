@@ -40,10 +40,10 @@ class ViolinPlot extends Component {
 
     const option = {
       grid: {
-        top: "5%",
-        left: "5%",
-        right: "5%",
-        bottom: "5%"
+        top: "10%",
+        left: "15%",
+        right: "15%",
+        bottom: "10%"
       },
       tooltip: {
         formatter: function(param) {
@@ -83,6 +83,7 @@ class ViolinPlot extends Component {
       },
       yAxis: {
         z: 2,
+        name:'yyy',
         type: "value",
         nameTextStyle: {
           color: "#999",

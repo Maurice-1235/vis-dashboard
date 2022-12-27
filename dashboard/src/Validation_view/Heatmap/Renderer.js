@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import * as d3 from "d3";
 import React from "react";
 
-const margin = { top: 10, right: 10, bottom: 20, left: 10 };
+const margin = { top: 5, right: 10, bottom: 20, left: 10 };
 
 export const Renderer = ({ width, height, data, setHoveredCell }) => {
   //bounds
@@ -65,7 +65,7 @@ export const Renderer = ({ width, height, data, setHoveredCell }) => {
             xLabel:  d.x,
             yLabel:  d.y,
             xPos: x + xScale.bandwidth() + margin.left,
-            yPos: y + xScale.bandwidth() / 2 + margin.top,
+            yPos: y + xScale.bandwidth() / 2 ,
             // value: ?
           });
         }}
@@ -106,8 +106,8 @@ export const Renderer = ({ width, height, data, setHoveredCell }) => {
     return (
       <text
         key={i}
-        x={-5}
-        y={y + yScale.bandwidth() / 2}
+        x={40}
+        y={y + yScale.bandwidth() / 2+15}
         textAnchor="end"
         dominantBaseline="middle"
         fontSize={10}

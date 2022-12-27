@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import React from "react";
-const tick = 10;
+const tick = 5;
 
 export const AxisLeft = ({ yScale, pixelsPerTick, width }) => {
   const range = yScale.range();
