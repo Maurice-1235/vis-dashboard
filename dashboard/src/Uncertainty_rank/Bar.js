@@ -4,8 +4,8 @@ import { transition } from "d3-transition";
 import { useRef, useEffect } from "react";
 
 export function FrontBar({ xScale, barHeight, data ,y}) {
-  console.log(y)
-  y = y*2
+  // console.log(y)
+  // y = y*2
   const containerRef = useRef(null);
   useEffect(() => {
     let node = containerRef.current;

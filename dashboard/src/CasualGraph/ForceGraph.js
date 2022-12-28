@@ -1,24 +1,3 @@
-// import React from "react";
-// import { runForceGraph } from "./ForceGraphGenerator";
-// import { useRef,useEffect } from "react";
-// import styles from "./ForceGraph.module.css";
-
-// export function ForceGraph({ linksData, nodesData }) {
-//   const containerRef = useRef(null);
-
-//   useEffect(() => {
-//     let destroyFn;
-
-//     if (containerRef.current) {
-//       const { destroy } = runForceGraph(containerRef.current, linksData, nodesData);
-//       destroyFn = destroy;
-//     }
-
-//     return destroyFn;
-//   }, [linksData, nodesData]);
-
-//   return <div ref={containerRef} className={styles.container} />;
-// }
 import React, { useState } from "react";
 import { runForceGraph } from "./ForceGraphGenerator";
 import { useRef,useEffect } from "react";
@@ -27,10 +6,10 @@ import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 
 cytoscape.use( dagre );
-
+let graphData = []
 export function ForceGraph({ linksData, nodesData }) {
   const [cy, setCy] = useState(null)
-
+  
   useEffect(() => {
     let _cy = cytoscape({
       container: document.getElementById('cy'),
@@ -46,7 +25,8 @@ export function ForceGraph({ linksData, nodesData }) {
         {
           selector: 'node',
           style: {
-            'background-color': '#11479e'
+            'background-color': '#11479e',
+            label: 'data(label)'
           }
         },
 
@@ -62,45 +42,52 @@ export function ForceGraph({ linksData, nodesData }) {
         }
       ],
 
-      elements: {
-        nodes: [
-          { data: { id: 'n0' } },
-          { data: { id: 'n1' } },
-          { data: { id: 'n2' } },
-          { data: { id: 'n3' } },
-          { data: { id: 'n4' } },
-          { data: { id: 'n5' } },
-          { data: { id: 'n6' } },
-          { data: { id: 'n7' } },
-          { data: { id: 'n8' } },
-          { data: { id: 'n9' } },
-          { data: { id: 'n10' } },
-          { data: { id: 'n11' } },
-          { data: { id: 'n12' } },
-          { data: { id: 'n13' } },
-          { data: { id: 'n14' } },
-          { data: { id: 'n15' } },
-          { data: { id: 'n16' } }
-        ],
-        edges: [
-          { data: { source: 'n0', target: 'n1' } },
-          { data: { source: 'n1', target: 'n2' } },
-          { data: { source: 'n1', target: 'n3' } },
-          { data: { source: 'n4', target: 'n5' } },
-          { data: { source: 'n4', target: 'n6' } },
-          { data: { source: 'n6', target: 'n7' } },
-          { data: { source: 'n6', target: 'n8' } },
-          { data: { source: 'n8', target: 'n9' } },
-          { data: { source: 'n8', target: 'n10' } },
-          { data: { source: 'n11', target: 'n12' } },
-          { data: { source: 'n12', target: 'n13' } },
-          { data: { source: 'n13', target: 'n14' } },
-          { data: { source: 'n13', target: 'n15' } },
-        ]
-      }
+      elements: [
+
+      ]
     });
+    // console.log(elements.nodes);
+    let selected = [0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92]
+    const graph = async () => {
+      const response = await fetch("http://127.0.0.1:5000/get_graph", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ selected_id: selected }),
+      });
+      const json = await response.json();
+      console.log("json", json);
+      // console.log(json.nodes)
+    
+      for (let x = 0; x < json.nodes.length; x++) {
+          _cy.add({
+            data: { id: json.nodes[x].id,
+            label:json.nodes[x].name }
+          })
+          graphData[json.nodes[x].id] = json.nodes[x].name
+      }
+      console.log(graphData)
+      for(let x = 0;x<json.links.length;x++){
+        _cy.add({
+          data:{
+            source:json.links[x].source,
+            target:json.links[x].target
+          }
+        })
+      }
+      _cy.layout({
+        name: 'circle'
+    }).run();
+    };
+    graph()
+   
     setCy(_cy)
-  })
+    
+    
+  },[])
 
   return <div id='cy'  className={styles.container} />;
 }
+
+export {graphData}

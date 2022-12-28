@@ -1,7 +1,7 @@
 import React from "react";
 export function Arrow({ x1, x2, y1, y2 }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 100">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 100">
       <defs>
         <marker
           id="arrowhead"
