@@ -19,13 +19,14 @@ id2name = {}
 X = np.empty(1)
 selected_X = np.empty(1)
 
+
 def original_data(params):
     global data
     global id2name
 
     file_name = params['file_name']
     data_dir = "dataset/" + file_name
-    print(data_dir)
+    # print(data_dir)
     data = pd.read_csv(data_dir)
 
     id = 0
@@ -62,13 +63,12 @@ def causal_graph(params):
     global X
     global selected_X
 
-    
     selected_id = params['selected_id']
-    print(selected_id)
+    # print(selected_id)
     X = data.to_numpy()
-    print(len(X))
+    # print(len(X))
     selected_X = X.take(selected_id, axis=0)
-    print(len(selected_X))
+    # print(len(selected_X))
 
     Record = ges(selected_X, 'local_score_CV_general')
     pyd = GraphUtils.to_pydot(Record['G'])
@@ -100,18 +100,29 @@ def causal_graph(params):
 def uncertainty_rank():
     # global selected_X
 
-    print(graph_data)
-    print(len(selected_X))
-    
+    # print(graph_data)
+    # print(data)
+    # print(len(selected_X))
+
+    node_type = {}
+    for i in range(data.shape[1]):
+        value_set = set(pd.unique(data.iloc[:, i]))
+        if len(value_set) <= 10:
+            node_type[i] = "categorical"
+        else:
+            node_type[i] = "numerical"
+    # print(node_type)
+
     uncertainty_list = []
     for e in graph_data['links']:
-        score = local_score_cv_general(selected_X, int(e['target']), [int(e['source'])], parameters={"kfold": 10, "lambda": 0.01})
+        score = local_score_cv_general(selected_X, int(e['target']), [int(
+            e['source'])], parameters={"kfold": 10, "lambda": 0.01})
         uncertainty_list.append({
             "source": e['source'],
+            "source_type": node_type[int(e['source'])],
             "target": e['target'],
+            "target_type": node_type[int(e['target'])],
             "score": score
         })
     newlist = sorted(uncertainty_list, key=lambda d: d['score'])
     return newlist
-
-

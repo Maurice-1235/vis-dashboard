@@ -14,7 +14,7 @@ def get_hello():
 @app.route("/get_data", methods=["POST"])
 def get_data():
     params = request.get_json() if request.method == "POST" else request.args
-    print(params)
+    # print(params)
     res = original_data(params)
     return jsonify(res)
 
