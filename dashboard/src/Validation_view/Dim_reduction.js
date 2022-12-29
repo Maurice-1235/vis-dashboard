@@ -2,7 +2,32 @@ import React, { useEffect, useState } from "react";
 import * as echarts from "echarts";
 
 const Dim_reduction = (props) => {
-  const [dim, setDim] = useState([]);
+  const defaultOption = {
+    grid:{
+      left: "13%",
+      bottom: "10%",
+      top: '5%'
+    },
+  xAxis: {},
+  yAxis: {},
+  brush: {
+    toolbox: ["rect", "clear"],
+    xAxisIndex: 0,
+  },
+  toolbox: {
+    show: false
+  },
+  series: [
+    {
+      symbolSize: 15,
+      data: [],
+      type: "scatter",
+    },
+  ],
+}
+  const [data, setData] = useState([])
+  const [chart, setChart] = useState(null)
+  const [option, setOption] = useState(defaultOption)
 
   const reduction = async (id) => {
     let arr = [];
@@ -21,7 +46,10 @@ const Dim_reduction = (props) => {
       arr.push(json[x]);
     }
     // console.log(arr);
-    setDim(arr);
+    let _option = { ...option }
+    _option.series[0].data = arr
+    setData(arr)
+    setOption(_option)
   };
   const initChart = () => {
     let element = document.getElementById("chart-container");
@@ -29,38 +57,7 @@ const Dim_reduction = (props) => {
       renderer: "canvas",
       useDirtyRect: false,
     });
-    myChart.clear();
-    // console.log("dim:", dim);
-    let data = dim;
-    let option;
-    option = {
-        grid:{
-            left:"3%"
-        },
-      xAxis: {},
-      yAxis: {},
-      brush: {
-        toolbox: ["rect", "clear"],
-        xAxisIndex: 0,
-      },
-      toolbox: {
-        left:"70%",
-        feature: {
-          dataView: {
-            readOnly: false,
-          },
-        },
-        
-      },
-      series: [
-        {
-          symbolSize: 15,
-          data: data,
-          type: "scatter",
-        },
-      ],
-    };
-    option && myChart.setOption(option);
+    setChart(myChart)
     myChart.dispatchAction({
       type: "takeGlobalCursor",
       // 如果想变为“可刷选状态”，必须设置。不设置则会关闭“可刷选状态”。
@@ -70,7 +67,15 @@ const Dim_reduction = (props) => {
         brushType: "rect",
       },
     });
-    myChart.on("brushEnd", function (params) {
+    window.addEventListener("resize", myChart.resize);
+  };
+  useEffect(() => {
+    initChart();
+    reduction();
+  }, []);
+  useEffect(() => {
+    chart && chart.setOption(option)
+    chart && chart.on("brushEnd", function (params) {
       let range = params.areas[0].coordRange;
       let xRange = range[0];
       let yRange = range[1];
@@ -88,19 +93,12 @@ const Dim_reduction = (props) => {
       }
       console.log("selected",list);
     });
-    window.addEventListener("resize", myChart.resize);
-  };
-  useEffect(() => {
-    initChart();
-  });
-  useEffect(() => {
-    reduction();
-  }, []);
+  }, [option]);
   return (
     <div
       className="chart"
       id="chart-container"
-      style={{ width: "500px", height: "300px" }}
+      style={{ width: "100%", height: "300px" }}
     />
   );
 };

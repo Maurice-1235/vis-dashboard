@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { runForceGraph } from "./ForceGraphGenerator";
 import { useRef,useEffect } from "react";
-import styles from "./ForceGraph.module.css";
+import "./ForceGraph.css";
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 
@@ -87,7 +87,7 @@ export function ForceGraph({ linksData, nodesData }) {
     
   },[])
 
-  return <div id='cy'  className={styles.container} />;
+  return <div id='cy' />;
 }
 
 export {graphData}
