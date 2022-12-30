@@ -4,10 +4,10 @@ import { useRef,useEffect } from "react";
 import "./ForceGraph.css";
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-
+import  '../globalData'
 cytoscape.use( dagre );
-let graphData = []
-export function ForceGraph({ linksData, nodesData }) {
+export let graphData=[]
+export function ForceGraph(props) {
   const [cy, setCy] = useState(null)
   
   useEffect(() => {
@@ -47,18 +47,20 @@ export function ForceGraph({ linksData, nodesData }) {
       ]
     });
     // console.log(elements.nodes);
-    let selected = [0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92]
+    // let selected = [0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92]
     const graph = async () => {
-      const response = await fetch("http://127.0.0.1:5000/get_graph", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ selected_id: selected }),
-      });
-      const json = await response.json();
-      console.log("json", json);
+    //   const response = await fetch("http://127.0.0.1:5000/get_graph", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ selected_id: selected }),
+    //   });
+    //   const json = await response.json();
+      // console.log("json", json);
       // console.log(json.nodes)
+
+      const json = props.data;
     
       for (let x = 0; x < json.nodes.length; x++) {
           _cy.add({
@@ -67,7 +69,7 @@ export function ForceGraph({ linksData, nodesData }) {
           })
           graphData[json.nodes[x].id] = json.nodes[x].name
       }
-      console.log(graphData)
+      console.log(graphData,graphData.length)
       for(let x = 0;x<json.links.length;x++){
         _cy.add({
           data:{
@@ -89,5 +91,7 @@ export function ForceGraph({ linksData, nodesData }) {
 
   return <div id='cy' />;
 }
-
-export {graphData}
+// export function getGraphData(){
+//   console.log("get value",global.graphData.connection)
+//   return global.graphData.connection
+// }

@@ -4,80 +4,87 @@ import { Rank } from "./Rank";
 import { graphData } from "../CasualGraph/ForceGraph";
 import { Scatterplot } from "../Validation_view/Scatterplot/Scatterplot";
 import { Heatmap } from "../Validation_view/Heatmap/Heatmap";
+
 // import ViolinPlot from "../Validation_view/Violinplot";
 // let data = require("../CasualGraph/ForceGraph")
 let edgeCount;
-function test(){
-    console.log(graphData[0])
+export let drawViolinPlot = false;
+export let drawHeatmap = false;
+export let drawScatterPlot = false;
+function test() {
+  console.log(graphData);
 }
-export function ListRanks() {
-  const [data,setData] = useState([])
-  const [graphLinks,setGraphlinks] = useState([])
+export function ListRanks(props) {
+  const [data, setData] = useState([]);
+  const [graphLinks, setGraphlinks] = useState([]);
   let edges = [];
   const total = 250;
- 
+
   useEffect(() => {
-    
+    // console.log('props', props);
+
     const rank = async (id) => {
-      const response = await fetch(
-        "http://127.0.0.1:5000/get_uncertainty_rank",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ id: (id) }),
-        }
-      );
-      const json = await response.json();
-      console.log("json", json);
-        // setData(json);
-       edgeCount = json.length;
-       setGraphlinks(graphData)
+      // const response = await fetch(
+      //   "http://127.0.0.1:5000/get_uncertainty_rank",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify({ id: (id) }),
+      //   }
+      // );
+      // const json = await response.json();
+      // console.log("json", json);
+      const json = props.data;
+      edgeCount = json.length;
+      console.log("connections are", graphData, graphData.length);
+      setGraphlinks(graphData);
       for (let x = 0; x < edgeCount; x++) {
         edges.push({
           source: graphData[parseInt(json[x].source)],
-        // source:graphData[2],
           target: graphData[parseInt(json[x].target)],
-        //   random_number: Math.floor(Math.random() * total + 1),
-          score:json[x].score,
-          source_type:json[x].source_type,
-          target_type:json[x].target_type,
-          id:x+1
+          //   random_number: Math.floor(Math.random() * total + 1),
+          score: json[x].score,
+          source_type: json[x].source_type,
+          target_type: json[x].target_type,
+          id: x + 1,
         });
-        // console.log({graphData})
-        console.log(graphData)
-        console.log(edges);
 
+        console.log(graphData);
+        console.log("graphdata", graphData.length);
+        console.log("edges", edges);
       }
+
       setData(edges);
     };
     rank();
-  },[graphLinks]);
+  }, [graphData]);
+  console.log(drawViolinPlot);
+  console.log(drawHeatmap);
+  console.log(drawScatterPlot);
   return (
     <>
-    <Typography align="left"> #Edges:{edgeCount}</Typography> 
-    <div>
-      {/* {edges[0].source} */}
-      {data.map((edge) => (
-        <Rank
-        id={edge.id}
-          source={edge.source}
-          target={edge.target}
-          source_type={edge.source_type}
-          target_type={edge.target_type}
-          x={0}
-          y={5}
-          full={250}
-          data={edge.score}
-        ></Rank>
-      ))}
-    </div>
-    {/* {drawViolinPlot ? <ViolinPlot></ViolinPlot>:<></>}
+      <Typography align="left"> #Edges:{edgeCount}</Typography>
+      <div>
+        {/* {edges[0].source} */}
+        {data.map((edge) => (
+          <Rank
+            id={edge.id}
+            source={edge.source}
+            target={edge.target}
+            source_type={edge.source_type}
+            target_type={edge.target_type}
+            x={0}
+            y={5}
+            full={250}
+            data={edge.score}
+          ></Rank>
+        ))}
+      </div>
+      {/* {drawViolinPlot ? <ViolinPlot data={data}></ViolinPlot>:<></>}
     {drawScatterPlot ? <Scatterplot></Scatterplot>:<></>}
     {drawHeatmap?<Heatmap></Heatmap>:<></>} */}
-
-    {/* <ViolinPlot></ViolinPlot> */}
     </>
   );
 }

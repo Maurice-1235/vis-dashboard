@@ -1,6 +1,9 @@
 import React from "react";
 import { FrontBar } from "./Bar";
 import { Arrow } from "./Arrow";
+import { drawViolinPlot } from "./ListRank";
+import { drawScatterPlot } from "./ListRank";
+import { drawHeatmap } from "./ListRank";
 // import { scaleLinear } from 'd3-scale';
 import * as d3 from "d3";
 // import ViolinPlot from "../Validation_view/Violinplot";
@@ -18,12 +21,15 @@ export function Rank({ id,source_type,target_type,source, target, x, y,full,data
   function check(source_type,target_type){
     if(source_type==="categorical"&&target_type==="numerical"){
       console.log("violin")
+      drawViolinPlot = true;
     }
     else if(source_type==="categorical"&&target_type==="categorical"){
       console.log("heatmap")
+      drawHeatmap = true;
     }
     else if(source_type==="numerical"&&target_type==="numerical"){
       console.log("scatterplot")
+      drawScatterPlot = true;
     }
     else{
       console.log("?")
