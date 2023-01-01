@@ -20,15 +20,7 @@ const Parallel = (props) => {
   const [chart, setChart] = useState(null)
   const [option, setOption] = useState(defaultOption)
   const dimension = async (id) => {
-    const response = await fetch("http://127.0.0.1:5000/get_data", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ file_name: "charity.csv"}),
-    });
-    const json = await response.json();
-    console.log("json", json);
+    const json = props.data;
     let _option = { ...option }
     _option.series.data = json.values
     _option.parallelAxis = json.dimensions

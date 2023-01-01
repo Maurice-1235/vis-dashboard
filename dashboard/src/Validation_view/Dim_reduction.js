@@ -15,7 +15,13 @@ const Dim_reduction = (props) => {
       xAxisIndex: 0,
     },
     toolbox: {
-      show: false,
+        left:"70%",
+        bottom:"92%",
+        feature: {
+          dataView: {
+            readOnly: false,
+          },
+        },
     },
     series: [
       {
