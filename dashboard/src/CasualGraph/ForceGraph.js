@@ -4,7 +4,6 @@ import { useRef,useEffect } from "react";
 import "./ForceGraph.css";
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-import  '../globalData'
 cytoscape.use( dagre );
 export let graphData=[]
 export function ForceGraph(props) {

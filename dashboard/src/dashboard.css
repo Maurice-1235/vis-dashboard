@@ -1,5 +1,5 @@
 .logo{
-     height:50px;
+     height:35px;
 }
 .translate{
     margin-left: 80%;
@@ -100,4 +100,44 @@ body{
 
 .chart{
     width: 100%;
+}
+
+
+/* 不太优雅的写法 */
+.half-box .divider{
+    border-bottom: 5px solid #D8D8D8;
+    margin: 0 5px;
+}
+
+.half-box{
+    height: calc((100vh - 90px)/2);
+    margin: 10px;
+    border-radius: 15px;
+    background-color: #fff;
+}
+.half-box{
+    margin: 10px 10px 10px 0;
+}
+
+.half-box .box-title{
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    font-size: 20px;
+    font-weight: 600;
+}
+.half-box .box-title .logo{
+    width: 30px;
+    height: 30px;
+}
+.half-box .half-box-content{
+    height: calc((100vh - 140px));
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-bottom: 15px;
+    
+}
+.half-box .half-box-content:last-child{
+   padding: 15px;
 }

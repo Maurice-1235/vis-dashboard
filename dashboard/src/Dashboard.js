@@ -1,5 +1,4 @@
 import * as React from "react";
-import Consequence from "./logo.png";
 import "./dashboard.css";
 import picGraph from "./graph.png";
 import File from "./file.png";
@@ -7,21 +6,27 @@ import Transfer from "./transfer.png";
 import GTranslateIcon from "@mui/icons-material/GTranslate";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { ForceGraph } from "./CasualGraph/ForceGraph";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Heatmap } from "./Validation_view/Heatmap/Heatmap";
 import { Scatterplot } from "./Validation_view/Scatterplot/Scatterplot";
 import Parallel from "./Validation_view/Parallel";
 import { ListRanks } from "./Uncertainty_rank/ListRank";
 import Dim_reduction from "./Validation_view/Dim_reduction";
-
+import ViolinPlot from "../src/Validation_view/Violinplot";
+import graphData from "./data.json";
+import System from "./system.svg";
+import Overview from "./overview.png";
 export default function AutoGrid() {
   const [loaded, setloaded] = useState(false);
   const [data, setdata] = useState();
+  const [type, settype] = useState();
+  const [, updateState] = useState();
+  const forceUpdate = useCallback(() => updateState({}), []);
 
   useEffect(() => {
     loadData();
   }, []);
-
+  console.log("re-render");
   const loadData = async () => {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
     //  const promises = [];
@@ -54,9 +59,9 @@ export default function AutoGrid() {
       },
       body: JSON.stringify({
         selected_id: [
-          0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36,
-          38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70,
-          72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92,
+          0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+          20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
+          37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
         ],
       }),
     });
@@ -74,14 +79,14 @@ export default function AutoGrid() {
     );
     const rankJson = await rankResponse.json();
 
-    // console.log({
-    //   data: dataJson,
-    //   dimReduction: dimReductionJson,
-    //   graph: graphJson,
-    //   rank: rankJson,
-    // });
-
     setdata({
+      data: dataJson,
+      dimReduction: dimReductionJson,
+      graph: graphJson,
+      rank: rankJson,
+    });
+
+    console.log({
       data: dataJson,
       dimReduction: dimReductionJson,
       graph: graphJson,
@@ -91,13 +96,39 @@ export default function AutoGrid() {
     setloaded(true);
   };
 
+  function getSource(source_type, index, target_type, index1) {
+    console.log(source_type, index, target_type, index1);
+    if (source_type === "categorical" && target_type === "numerical") {
+      console.log("violin");
+      settype("violin");
+      // forceUpdate();
+    } else if (source_type === "categorical" && target_type === "categorical") {
+      console.log("heatmap");
+      settype("heatmap");
+    } else if (source_type === "numerical" && target_type === "numerical") {
+      console.log("scatterplot");
+      settype("scatterplot");
+      // alert('rendering scatterplot')
+      // drawScatterPlot = true;
+    } else {
+      console.log("?");
+    }
+    let validationData = [];
+    for (let x = 0; x < data.data.values.length; x++) {
+      validationData.push({
+        x: data.data.values[x][index],
+        y: data.data.values[x][index1],
+      });
+    }
+    console.log(validationData);
+  }
   return (
     <>
       {loaded ? (
         <>
           <div className="header">
             <div className="icon">
-              <img className="logo" src={Consequence} alt="" />
+              <img className="logo" src={System} alt="" />
               <span>CasualLens</span>
             </div>
             <GTranslateIcon
@@ -112,18 +143,8 @@ export default function AutoGrid() {
           <div className="container">
             <div className="box">
               <div className="box-title">
-                <img className="logo" src={picGraph} alt="" />
-                Casual Graph
-              </div>
-              <div className="divider"></div>
-              <div className="box-content">
-                <ForceGraph data={data.graph} />
-              </div>
-            </div>
-            <div className="box">
-              <div className="box-title">
-                <img className="logo" src={Transfer} alt="" />
-                Uncertainty
+                <img className="logo" src={Overview} alt="" />
+                Data Overview
               </div>
               <div className="divider"></div>
               <div className="box-content">
@@ -133,12 +154,51 @@ export default function AutoGrid() {
             </div>
             <div className="box">
               <div className="box-title">
-                <img className="logo" src={File} alt="" />
-                Validation View
+                <img className="logo" src={picGraph} alt="" />
+                Casual Graph
               </div>
               <div className="divider"></div>
               <div className="box-content">
-                <ListRanks data={data.rank}></ListRanks>
+                <ForceGraph data={data.graph} />
+              </div>
+            </div>
+            <div>
+              <div className="half-box">
+                <div className="box-title">
+                  <img className="logo" src={Transfer} alt="" />
+                  Uncertainty rank
+                </div>
+                <div className="divider"></div>
+                <div className="half-box-content">
+                  <ListRanks
+                    data={data.rank}
+                    typehandler={getSource}
+                  ></ListRanks>
+                </div>
+              </div>
+              <div className="half-box">
+                <div className="box-title">
+                  <img className="logo" src={File} alt="" />
+                  Validation view
+                </div>
+                <div className="divider"></div>
+                <div className="half-box-content">
+                  {
+                    data.
+                    type == "violin" ? (
+                      <ViolinPlot data={graphData}></ViolinPlot>
+                    ) : type == "heatmap" ? (
+                      <Heatmap></Heatmap>
+                    ) : (
+                      type == "scatterplot" && <Scatterplot></Scatterplot>
+                    )
+                    // type
+                  }
+                  {/* {type} */}
+                  {/* <Heatmap data={graphData} width={500} height={300}></Heatmap> */}
+                  {/* <ViolinPlot data={data}></ViolinPlot> */}
+                  {/* <Scatterplot data={graphData} width={500} height={300} /> */}
+                </div>
               </div>
             </div>
           </div>

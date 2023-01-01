@@ -22,6 +22,7 @@ export function ListRanks(props) {
 
   useEffect(() => {
     // console.log('props', props);
+    // props.typehandler('changed in listrank')
 
     const rank = async (id) => {
       // const response = await fetch(
@@ -44,6 +45,8 @@ export function ListRanks(props) {
         edges.push({
           source: graphData[parseInt(json[x].source)],
           target: graphData[parseInt(json[x].target)],
+          source_idx:json[x].source,
+          target_idx:json[x].target,
           //   random_number: Math.floor(Math.random() * total + 1),
           score: json[x].score,
           source_type: json[x].source_type,
@@ -60,9 +63,6 @@ export function ListRanks(props) {
     };
     rank();
   }, [graphData]);
-  console.log(drawViolinPlot);
-  console.log(drawHeatmap);
-  console.log(drawScatterPlot);
   return (
     <>
       <Typography align="left"> #Edges:{edgeCount}</Typography>
@@ -73,12 +73,15 @@ export function ListRanks(props) {
             id={edge.id}
             source={edge.source}
             target={edge.target}
+            src_idx = {edge.source_idx}
+            trg_idx = {edge.target_idx}
             source_type={edge.source_type}
             target_type={edge.target_type}
             x={0}
             y={5}
-            full={250}
+            full={total}
             data={edge.score}
+            typehandler={props.typehandler}
           ></Rank>
         ))}
       </div>
