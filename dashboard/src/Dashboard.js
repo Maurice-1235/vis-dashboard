@@ -1,3 +1,4 @@
+
 import * as React from "react";
 import Consequence from "./logo.png";
 import "./dashboard.css";
@@ -7,25 +8,25 @@ import Transfer from "./transfer.png";
 import GTranslateIcon from "@mui/icons-material/GTranslate";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { ForceGraph } from "./CasualGraph/ForceGraph";
-import { useState, useEffect } from "react";
+import { createContext, useState, useEffect, useCallback } from "react";
 import { Heatmap } from "./Validation_view/Heatmap/Heatmap";
 import { Scatterplot } from "./Validation_view/Scatterplot/Scatterplot";
 import Parallel from "./Validation_view/Parallel";
 import { ListRanks } from "./Uncertainty_rank/ListRank";
 import Dim_reduction from "./Validation_view/Dim_reduction";
+import ViolinPlot from "../src/Validation_view/Violinplot";
+import graphData from "./data.json";
+import { TypeContext } from "./TypeContext";
 
 export default function AutoGrid() {
   const [loaded, setloaded] = useState(false);
   const [data, setdata] = useState();
-
+  const [type, setType] = useState(null);
   useEffect(() => {
     loadData();
   }, []);
-
+  console.log("re-render");
   const loadData = async () => {
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
-    //  const promises = [];
-
     const dataResponse = await fetch("http://127.0.0.1:5000/get_data", {
       method: "POST",
       headers: {
@@ -42,7 +43,6 @@ export default function AutoGrid() {
         headers: {
           "Content-Type": "application/json",
         },
-        // body: JSON.stringify({ id: 0 }),
       }
     );
     const dimReductionJson = await dimReductionResponse.json();
@@ -54,9 +54,9 @@ export default function AutoGrid() {
       },
       body: JSON.stringify({
         selected_id: [
-          0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36,
-          38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70,
-          72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92,
+          0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+          20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
+          37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
         ],
       }),
     });
@@ -74,14 +74,14 @@ export default function AutoGrid() {
     );
     const rankJson = await rankResponse.json();
 
-    // console.log({
-    //   data: dataJson,
-    //   dimReduction: dimReductionJson,
-    //   graph: graphJson,
-    //   rank: rankJson,
-    // });
-
     setdata({
+      data: dataJson,
+      dimReduction: dimReductionJson,
+      graph: graphJson,
+      rank: rankJson,
+    });
+
+    console.log({
       data: dataJson,
       dimReduction: dimReductionJson,
       graph: graphJson,
@@ -90,6 +90,19 @@ export default function AutoGrid() {
 
     setloaded(true);
   };
+
+  function getSource( index,index1) {
+    console.log( index, index1);
+    let validationData = [];
+    for (let x = 0; x < data.data.values.length; x++) {
+      validationData.push({
+        x: data.data.values[x][index],
+        y: data.data.values[x][index1],
+      });
+    }
+    console.log(validationData);
+    console.log(type);
+  }
 
   return (
     <>
@@ -123,7 +136,7 @@ export default function AutoGrid() {
             <div className="box">
               <div className="box-title">
                 <img className="logo" src={Transfer} alt="" />
-                Uncertainty
+                Data Overview
               </div>
               <div className="divider"></div>
               <div className="box-content">
@@ -138,7 +151,27 @@ export default function AutoGrid() {
               </div>
               <div className="divider"></div>
               <div className="box-content">
-                <ListRanks data={data.rank}></ListRanks>
+                <TypeContext.Provider value={{ type, setType }}>
+                  <ListRanks
+                    data={data.rank}
+                    typehandler={getSource}
+                  ></ListRanks>
+                  {
+                    // data.
+                    // type === "violin" ? (
+                    //   <ViolinPlot data={data}></ViolinPlot>
+                    // ) : type === "heatmap" ? (
+                    //   <Heatmap data={graphData} width={500} height={300}></Heatmap>
+                    // ) : (
+                    //   type === "scatterplot" && <Scatterplot data={graphData} width={500} height={300} />
+                    // )
+                    type
+                  }
+                </TypeContext.Provider>
+
+                {/* <Heatmap data={graphData} width={500} height={300}></Heatmap> */}
+                {/* <ViolinPlot></ViolinPlot> */}
+                {/* <Scatterplot data={graphData} width={500} height={300} /> */}
               </div>
             </div>
           </div>
