@@ -1,6 +1,4 @@
-
 import * as React from "react";
-import Consequence from "./logo.png";
 import "./dashboard.css";
 import picGraph from "./graph.png";
 import File from "./file.png";
@@ -8,7 +6,7 @@ import Transfer from "./transfer.png";
 import GTranslateIcon from "@mui/icons-material/GTranslate";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { ForceGraph } from "./CasualGraph/ForceGraph";
-import {  useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Heatmap } from "./Validation_view/Heatmap/Heatmap";
 import { Scatterplot } from "./Validation_view/Scatterplot/Scatterplot";
 import Parallel from "./Validation_view/Parallel";
@@ -17,11 +15,14 @@ import Dim_reduction from "./Validation_view/Dim_reduction";
 import ViolinPlot from "../src/Validation_view/Violinplot";
 import graphData from "./data.json";
 import { TypeContext } from "./TypeContext";
+import System from "./system.svg";
+import Overview from "./overview.png";
 
 export default function AutoGrid() {
   const [loaded, setloaded] = useState(false);
   const [data, setdata] = useState();
-  const [type, setType] = useState(null);
+  const [type, setType] = useState();
+
   useEffect(() => {
     loadData();
   }, []);
@@ -90,8 +91,8 @@ export default function AutoGrid() {
     setloaded(true);
   };
 
-  function getSource( index,index1) {
-    console.log( index, index1);
+  function getSource(index, index1) {
+    console.log(index, index1);
     let validationData = [];
     for (let x = 0; x < data.data.values.length; x++) {
       validationData.push({
@@ -109,7 +110,7 @@ export default function AutoGrid() {
         <>
           <div className="header">
             <div className="icon">
-              <img className="logo" src={Consequence} alt="" />
+              <img className="logo" src={System} alt="" />
               <span>CasualLens</span>
             </div>
             <GTranslateIcon
@@ -124,17 +125,7 @@ export default function AutoGrid() {
           <div className="container">
             <div className="box">
               <div className="box-title">
-                <img className="logo" src={picGraph} alt="" />
-                Casual Graph
-              </div>
-              <div className="divider"></div>
-              <div className="box-content">
-                <ForceGraph data={data.graph} />
-              </div>
-            </div>
-            <div className="box">
-              <div className="box-title">
-                <img className="logo" src={Transfer} alt="" />
+                <img className="logo" src={Overview} alt="" />
                 Data Overview
               </div>
               <div className="divider"></div>
@@ -145,32 +136,53 @@ export default function AutoGrid() {
             </div>
             <div className="box">
               <div className="box-title">
-                <img className="logo" src={File} alt="" />
-                Validation View
+                <img className="logo" src={picGraph} alt="" />
+                Casual Graph
               </div>
               <div className="divider"></div>
               <div className="box-content">
+                <ForceGraph data={data.graph} />
+              </div>
+            </div>
+            <div>
+              <div className="half-box">
+                <div className="box-title">
+                  <img className="logo" src={Transfer} alt="" />
+                  Uncertainty rank
+                </div>
+                <div className="divider"></div>
+                <div className="half-box-content">
                 <TypeContext.Provider value={{ type, setType }}>
                   <ListRanks
                     data={data.rank}
                     typehandler={getSource}
                   ></ListRanks>
-                  {
-                    // data.
-                    // type === "violin" ? (
-                    //   <ViolinPlot data={data}></ViolinPlot>
-                    // ) : type === "heatmap" ? (
-                    //   <Heatmap data={graphData} width={500} height={300}></Heatmap>
-                    // ) : (
-                    //   type === "scatterplot" && <Scatterplot data={graphData} width={500} height={300} />
-                    // )
-                    type
-                  }
-                </TypeContext.Provider>
 
-                {/* <Heatmap data={graphData} width={500} height={300}></Heatmap> */}
-                {/* <ViolinPlot></ViolinPlot> */}
-                {/* <Scatterplot data={graphData} width={500} height={300} /> */}
+                </TypeContext.Provider>
+                </div>
+              </div>
+              <div className="half-box">
+                <div className="box-title">
+                  <img className="logo" src={File} alt="" />
+                  Validation view
+                </div>
+                <div className="divider"></div>
+                <div className="half-box-content">
+                  {
+
+                    type == "violin" ? (
+                      <ViolinPlot ></ViolinPlot>
+                    ) : type == "heatmap" ? (
+                      <Heatmap></Heatmap>
+                    ) : (
+                      type == "scatterplot" && <Scatterplot></Scatterplot>
+                    )
+                    // type
+                  }
+                  {/* <Heatmap data={graphData} width={500} height={300}></Heatmap> */}
+                  {/* <ViolinPlot data={data}></ViolinPlot> */}
+                  {/* <Scatterplot data={graphData} width={500} height={300} /> */}
+                </div>
               </div>
             </div>
           </div>
