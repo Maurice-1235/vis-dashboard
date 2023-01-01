@@ -8,7 +8,7 @@ import Transfer from "./transfer.png";
 import GTranslateIcon from "@mui/icons-material/GTranslate";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { ForceGraph } from "./CasualGraph/ForceGraph";
-import { createContext, useState, useEffect, useCallback } from "react";
+import {  useState, useEffect } from "react";
 import { Heatmap } from "./Validation_view/Heatmap/Heatmap";
 import { Scatterplot } from "./Validation_view/Scatterplot/Scatterplot";
 import Parallel from "./Validation_view/Parallel";
@@ -69,7 +69,6 @@ export default function AutoGrid() {
         headers: {
           "Content-Type": "application/json",
         },
-        // body: JSON.stringify({ id: 0 }),
       }
     );
     const rankJson = await rankResponse.json();
