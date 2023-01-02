@@ -9,12 +9,14 @@ import { ForceGraph } from "./CasualGraph/ForceGraph";
 import { useState, useEffect } from "react";
 import { Heatmap } from "./Validation_view/Heatmap/Heatmap";
 import { Scatterplot } from "./Validation_view/Scatterplot/Scatterplot";
+import { graphData } from "./CasualGraph/ForceGraph";
 import Parallel from "./Validation_view/Parallel";
 import { ListRanks } from "./Uncertainty_rank/ListRank";
 import Dim_reduction from "./Validation_view/Dim_reduction";
 import ViolinPlot from "../src/Validation_view/Violinplot";
-import graphData from "./data.json";
+// import graphData from "./data.json";
 import { TypeContext } from "./TypeContext";
+import { ValidationContext } from "./TypeContext";
 import System from "./system.svg";
 import Overview from "./overview.png";
 
@@ -22,7 +24,10 @@ export default function AutoGrid() {
   const [loaded, setloaded] = useState(false);
   const [data, setdata] = useState();
   const [type, setType] = useState();
-
+  const [validationData, setValidationData] = useState([]);
+  const [source, setSource] = useState();
+  const [target, setTarget] = useState();
+  const [change,setChange] = useState(false)
   useEffect(() => {
     loadData();
   }, []);
@@ -55,9 +60,9 @@ export default function AutoGrid() {
       },
       body: JSON.stringify({
         selected_id: [
-          0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-          20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
-          37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
+          0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36,
+          38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70,
+          72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92,
         ],
       }),
     });
@@ -90,16 +95,22 @@ export default function AutoGrid() {
 
     setloaded(true);
   };
-
+  // let validationData = [];
+  let tmp = [];
+  let prevIndex=-1,prevIndex1=-1
   function getSource(index, index1) {
     console.log(index, index1);
-    let validationData = [];
+    if(index!==prevIndex||index1!==prevIndex1||(prevIndex==-1&&prevIndex1==-1))
+      setChange(!change)
+    setSource(graphData[index]);
+    setTarget(graphData[index1]);
     for (let x = 0; x < data.data.values.length; x++) {
-      validationData.push({
-        x: data.data.values[x][index],
-        y: data.data.values[x][index1],
+      tmp.push({
+        x: String(data.data.values[x][index]),
+        y: String(data.data.values[x][index1]),
       });
     }
+    setValidationData(tmp);
     console.log(validationData);
     console.log(type);
   }
@@ -152,13 +163,12 @@ export default function AutoGrid() {
                 </div>
                 <div className="divider"></div>
                 <div className="half-box-content">
-                <TypeContext.Provider value={{ type, setType }}>
-                  <ListRanks
-                    data={data.rank}
-                    typehandler={getSource}
-                  ></ListRanks>
-
-                </TypeContext.Provider>
+                  <TypeContext.Provider value={{ type, setType }}>
+                    <ListRanks
+                      data={data.rank}
+                      typehandler={getSource}
+                    ></ListRanks>
+                  </TypeContext.Provider>
                 </div>
               </div>
               <div className="half-box">
@@ -168,20 +178,46 @@ export default function AutoGrid() {
                 </div>
                 <div className="divider"></div>
                 <div className="half-box-content">
-                  {
-
-                    type == "violin" ? (
-                      <ViolinPlot ></ViolinPlot>
-                    ) : type == "heatmap" ? (
-                      <Heatmap></Heatmap>
-                    ) : (
-                      type == "scatterplot" && <Scatterplot></Scatterplot>
+                  {type}
+                  {(type == "violin")? (
+                    <ViolinPlot
+                      key = {change}
+                      data={validationData}
+                      src_name={source}
+                      trg_name={target}
+                      changeHandler={setChange}
+                    ></ViolinPlot>
+                  ) : (type == "heatmap") ? (
+                    <Heatmap
+                      key = {change}
+                      data={validationData}
+                      src_name={source}
+                      trg_name={target}
+                      width={400}
+                      height={300}
+                      changeHandler={setChange}
+                    ></Heatmap>
+                  ) : (
+                    (type == "scatterplot") &&(
+                      <Scatterplot
+                        key ={change}
+                        data={validationData}
+                        src_name={source}
+                        trg_name={target}
+                        width={400}
+                        height={300}
+                        changeHandler={setChange}
+                      ></Scatterplot>
                     )
-                    // type
+                  )}
+
+                  {
+                    // type == "violin"? <Scatterplot data={validationData} src_name={source} trg_name={target} width={400} height={300}  ></Scatterplot>:<></>
                   }
+                  {/* {
+                    type == "violin"? <ViolinPlot data={validationData} src_name={source} trg_name={target}></ViolinPlot>:<></>
+                  } */}
                   {/* <Heatmap data={graphData} width={500} height={300}></Heatmap> */}
-                  {/* <ViolinPlot data={data}></ViolinPlot> */}
-                  {/* <Scatterplot data={graphData} width={500} height={300} /> */}
                 </div>
               </div>
             </div>

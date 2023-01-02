@@ -5,44 +5,31 @@ import { AxisBottom } from "./AxisBottom";
 import { useState } from "react";
 import React from "react";
 
-const margin = { top: 60, right: 60, bottom: 60, left: 60 };
+const margin = { top: 0, right: 60, bottom: 90, left: 90 };
 
-
-export const Scatterplot = ({ width, height, data }) => {
+export const Scatterplot = ({ width, height, data, src_name, trg_name }) => {
+  // Layout. The div size is set by the given props.
+  // The bounds (=area inside the axis) is calculated by substracting the margins
   const boundsWidth = width - margin.right - margin.left;
   const boundsHeight = height - margin.top - margin.bottom;
 
-  const [hoveredGroup, setHoveredGroup] = useState(null);
-
   // Scales
-  const yScale = d3.scaleLinear().domain([35, 85]).range([boundsHeight, 0]);
-  const xScale = d3
-    .scaleLinear()
-    .domain([-3000, 50000])
-    .range([0, boundsWidth]);
-  const allGroups = data.map((d) => String(d.group));
-//   const colorScale = d3
-//     .scaleOrdinal()
-//     .domain(allGroups)
-//     .range(["#e0ac2b", "#e85252", "#6689c6", "#9a6fb0", "#a53253"]);
+  const yScale = d3.scaleLinear().domain([0, 10]).range([boundsHeight, 0]);
+  const xScale = d3.scaleLinear().domain([0, 10]).range([0, boundsWidth]);
 
   // Build the shapes
   const allShapes = data.map((d, i) => {
-    const className =
-         styles.scatterplotCircle + " " +
-         styles.scatterplotCircle;
-
     return (
       <circle
         key={i}
-        r={5}
-        cx={xScale(d.x)}
-        cy={yScale(d.y)}
-        className={className}
-        stroke={'#9fc5e8'}
-        fill={'#9fc5e8'}
-        onMouseOver={() => setHoveredGroup(d.group)}
-        onMouseLeave={() => setHoveredGroup(null)}
+        r={2}
+        cx={xScale(d.y)}
+        cy={yScale(d.x)}
+        opacity={1}
+        stroke="#b0c8ed"
+        fill="#b0c8ed"
+        fillOpacity={0.2}
+        strokeWidth={2}
       />
     );
   });
@@ -50,6 +37,7 @@ export const Scatterplot = ({ width, height, data }) => {
   return (
     <div>
       <svg width={width} height={height}>
+        {/* first group is for the violin and box shapes */}
         <g
           width={boundsWidth}
           height={boundsHeight}
@@ -58,6 +46,7 @@ export const Scatterplot = ({ width, height, data }) => {
           {/* Y axis */}
           <AxisLeft yScale={yScale} pixelsPerTick={40} width={boundsWidth} />
 
+          {/* X axis, use an additional translation to appear at the bottom */}
           <g transform={`translate(0, ${boundsHeight})`}>
             <AxisBottom
               xScale={xScale}
@@ -65,7 +54,13 @@ export const Scatterplot = ({ width, height, data }) => {
               height={boundsHeight}
             />
           </g>
-
+          {/* label */}
+          <text x={width / 2} y={240} textAnchor="middle">
+            {src_name}
+          </text>
+          <text x={-30} y={30} textAnchor="middle">
+            {trg_name}
+          </text>
           {/* Circles */}
           {allShapes}
         </g>

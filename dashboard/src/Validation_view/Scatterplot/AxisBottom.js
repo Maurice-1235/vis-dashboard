@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import React from "react";
 
 // tick length
-const tick = 5;
+const tick = 10;
 
 export const AxisBottom = ({
   xScale,

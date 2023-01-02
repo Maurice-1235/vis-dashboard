@@ -31,9 +31,9 @@ export function Rank({
   const barHeight = 5;
   const xScale = d3.scaleLinear().domain([0,total]).range([0,250]);
   count++;
-  console.log(source);
-  console.log(target);
-  console.log(data)
+  // console.log(source);
+  // console.log(target);
+  // console.log(data)
   // useEffect(() => {
   //   setType('changed in rank')
   //   // console.log(type.type)
@@ -43,7 +43,7 @@ export function Rank({
     typehandler( src_idx,trg_idx)
   }
   function check(src_type,trg_type){
-    if (src_type=== "categorical" && trg_type === "numerical") {
+    if (src_type=== "categorical" && trg_type === "numerical"||src_type=== "numerical" && trg_type === "categorical") {
       // settype('violin');
       setType('violin')
       // forceUpdate();
