@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { runForceGraph } from "./ForceGraphGenerator";
+// import { runForceGraph } from "./ForceGraphGenerator";
 import { useRef,useEffect } from "react";
 import "./ForceGraph.css";
 import cytoscape from 'cytoscape';

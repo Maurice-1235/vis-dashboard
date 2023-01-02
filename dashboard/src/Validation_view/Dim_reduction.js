@@ -8,6 +8,7 @@ const Dim_reduction = (props) => {
       bottom: "10%",
       top: "5%",
     },
+
     xAxis: {},
     yAxis: {},
     brush: {
@@ -35,24 +36,13 @@ const Dim_reduction = (props) => {
   const [chart, setChart] = useState(null);
   const [option, setOption] = useState(defaultOption);
 
-  const reduction = async () => {
+  const reduction =  () => {
     let arr = [];
-
-    // const response = await fetch("http://127.0.0.1:5000/get_dim_reduction", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ id: parseInt(id) }),
-    // });
-    // const json = await response.json();
-    // console.log("json", json);
     const json = props.data;
     for (let x = 0; x < json.length; x++) {
       json[x].push(x + 1);
       arr.push(json[x]);
     }
-    // console.log(arr);
     let _option = { ...option };
     _option.series[0].data = arr;
     setData(arr);

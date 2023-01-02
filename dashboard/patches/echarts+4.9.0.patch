@@ -1,0 +1,84 @@
+diff --git a/node_modules/echarts/lib/component/toolbox/feature/DataView.js b/node_modules/echarts/lib/component/toolbox/feature/DataView.js
+index 74be009..e183d0e 100644
+--- a/node_modules/echarts/lib/component/toolbox/feature/DataView.js
++++ b/node_modules/echarts/lib/component/toolbox/feature/DataView.js
+@@ -354,7 +354,7 @@ DataView.prototype.onclick = function (ecModel, api) {
+   }
+ 
+   var root = document.createElement('div');
+-  root.style.cssText = 'position:absolute;left:5px;top:5px;bottom:5px;right:5px;';
++  root.style.cssText = 'position:absolute;left:5px;top:5px;bottom:5px;right:5px;width:100%;';
+   root.style.backgroundColor = model.get('backgroundColor') || '#fff'; // Create elements
+ 
+   var header = document.createElement('h4');
+@@ -364,7 +364,7 @@ DataView.prototype.onclick = function (ecModel, api) {
+   header.style.color = model.get('textColor');
+   var viewMain = document.createElement('div');
+   var textarea = document.createElement('textarea');
+-  viewMain.style.cssText = 'display:block;width:100%;overflow:auto;';
++  viewMain.style.cssText = 'display:block;overflow:auto;';
+   var optionToContent = model.get('optionToContent');
+   var contentToOption = model.get('contentToOption');
+   var result = getContentFromModel(ecModel);
+@@ -390,14 +390,16 @@ DataView.prototype.onclick = function (ecModel, api) {
+ 
+   var blockMetaList = result.meta;
+   var buttonContainer = document.createElement('div');
+-  buttonContainer.style.cssText = 'position:absolute;bottom:0;left:0;right:0;';
+-  var buttonStyle = 'float:right;margin-right:20px;border:none;' + 'cursor:pointer;padding:2px 5px;font-size:12px;border-radius:3px';
++  buttonContainer.style.cssText = 'bottom:0;left:30;right:0;';
++  var buttonStyle = 'float:right;margin-left:20px;border:none;' + 'cursor:pointer;padding:2px 5px;font-size:12px;border-radius:3px';
+   var closeButton = document.createElement('div');
+   var refreshButton = document.createElement('div');
+   buttonStyle += ';background-color:' + model.get('buttonColor');
+   buttonStyle += ';color:' + model.get('buttonTextColor');
+   var self = this;
+ 
++
++
+   function close() {
+     container.removeChild(root);
+     self._dom = null;
+diff --git a/node_modules/echarts/src/component/toolbox/feature/DataView.js b/node_modules/echarts/src/component/toolbox/feature/DataView.js
+index d607def..31e38e0 100644
+--- a/node_modules/echarts/src/component/toolbox/feature/DataView.js
++++ b/node_modules/echarts/src/component/toolbox/feature/DataView.js
+@@ -318,7 +318,7 @@ DataView.prototype.onclick = function (ecModel, api) {
+         container.removeChild(this._dom);
+     }
+     var root = document.createElement('div');
+-    root.style.cssText = 'position:absolute;left:5px;top:5px;bottom:5px;right:5px;';
++    root.style.cssText = 'position:absolute;left:5px;top:5px;bottom:5px;right:5px;width:100%;';
+     root.style.backgroundColor = model.get('backgroundColor') || '#fff';
+ 
+     // Create elements
+@@ -330,7 +330,7 @@ DataView.prototype.onclick = function (ecModel, api) {
+ 
+     var viewMain = document.createElement('div');
+     var textarea = document.createElement('textarea');
+-    viewMain.style.cssText = 'display:block;width:100%;overflow:auto;';
++    viewMain.style.cssText = 'display:block;overflow:auto;';
+ 
+     var optionToContent = model.get('optionToContent');
+     var contentToOption = model.get('contentToOption');
+@@ -358,9 +358,9 @@ DataView.prototype.onclick = function (ecModel, api) {
+     var blockMetaList = result.meta;
+ 
+     var buttonContainer = document.createElement('div');
+-    buttonContainer.style.cssText = 'position:absolute;bottom:0;left:0;right:0;';
++    buttonContainer.style.cssText = 'position:absolute;bottom:0;left:30;right:0;';
+ 
+-    var buttonStyle = 'float:right;margin-right:20px;border:none;'
++    var buttonStyle = 'float:right;margin-left:20px;border:none;'
+         + 'cursor:pointer;padding:2px 5px;font-size:12px;border-radius:3px';
+     var closeButton = document.createElement('div');
+     var refreshButton = document.createElement('div');
+@@ -412,7 +412,7 @@ DataView.prototype.onclick = function (ecModel, api) {
+     root.appendChild(viewMain);
+     root.appendChild(buttonContainer);
+ 
+-    viewMain.style.height = (container.clientHeight - 80) + 'px';
++    viewMain.style.height = (container.clientHeight - 100) + 'px';
+ 
+     container.appendChild(root);
+     this._dom = root;

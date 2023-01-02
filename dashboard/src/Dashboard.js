@@ -10,16 +10,12 @@ import { useState, useEffect } from "react";
 import { Heatmap } from "./Validation_view/Heatmap/Heatmap";
 import { Scatterplot } from "./Validation_view/Scatterplot/Scatterplot";
 import { graphData } from "./CasualGraph/ForceGraph";
-import Parallel from "./Validation_view/Parallel";
 import { ListRanks } from "./Uncertainty_rank/ListRank";
-import Dim_reduction from "./Validation_view/Dim_reduction";
 import ViolinPlot from "../src/Validation_view/Violinplot";
-// import graphData from "./data.json";
+import DataOverview from "./DataOverview/Dataoverview";
 import { TypeContext } from "./TypeContext";
-import { ValidationContext } from "./TypeContext";
 import System from "./system.svg";
 import Overview from "./overview.png";
-
 export default function AutoGrid() {
   const [loaded, setloaded] = useState(false);
   const [data, setdata] = useState();
@@ -141,8 +137,7 @@ export default function AutoGrid() {
               </div>
               <div className="divider"></div>
               <div className="box-content">
-                <Dim_reduction data={data.dimReduction}></Dim_reduction>
-                <Parallel data={data.data}></Parallel>
+                <DataOverview parallelData={data.data} dimData={data.dimReduction}></DataOverview>
               </div>
             </div>
             <div className="box">

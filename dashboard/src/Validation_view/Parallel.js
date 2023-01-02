@@ -19,7 +19,7 @@ const Parallel = (props) => {
   }
   const [chart, setChart] = useState(null)
   const [option, setOption] = useState(defaultOption)
-  const dimension = async (id) => {
+  const dimension = () => {
     const json = props.data;
     let _option = { ...option }
     _option.series.data = json.values
