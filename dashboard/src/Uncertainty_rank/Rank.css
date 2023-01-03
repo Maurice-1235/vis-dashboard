@@ -1,0 +1,30 @@
+.rank-box{
+  width: 100%;
+  height: 100%;
+  border: 2px solid #000;
+  margin-bottom: 10px;
+}
+
+.rank-box .rank-box-title{
+  display: flex;
+  padding: 10px;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+.rank-box .rank-box-title span{
+  width: calc(50% - 35px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rank-box .rank-box-title svg{
+  width: 70px;
+  height: 20px;
+  margin: 0 20px;
+}
+
+.rank-box .rank-box-bar{
+  height: 6px;
+  background-color: #8EA8BA;
+}

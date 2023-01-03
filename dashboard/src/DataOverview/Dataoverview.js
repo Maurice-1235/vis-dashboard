@@ -15,10 +15,7 @@ const DataOverview = (props) => {
   };
   let arr = [];
   const generateGrids = () => {
-    const grid = {
-      width: "100%",
-      height: "250px",
-    };
+    const grid = { height: '250px'};
     const xAxis = {};
     const yAxis = {};
     const series = {
@@ -36,6 +33,7 @@ const DataOverview = (props) => {
   const gridOptions = generateGrids();
   const _option = {
     animation: false,
+    color: '#8EA8BA',
     toolbox: {
       left: "60%",
       bottom: "95%",
@@ -45,14 +43,14 @@ const DataOverview = (props) => {
         },
       },
     },
-    brush: {
+    brush: [{
       brushLink: "all",
       xAxisIndex: gridOptions.xAxis,
       yAxisIndex: gridOptions.yAxis,
       inBrush: {
         opacity: 1,
       },
-    },
+    }],
     tooltip: {
       trigger: "item",
     },
@@ -60,7 +58,7 @@ const DataOverview = (props) => {
     parallel: {
       bottom: "5%",
       left: "10%",
-      top: "40%",
+      top: "400px",
       height: "30%",
       width: "80%",
       parallelAxisDefault: {
@@ -88,7 +86,7 @@ const DataOverview = (props) => {
     },
     xAxis: gridOptions.xAxis,
     yAxis: gridOptions.yAxis,
-    grid: gridOptions.grid,
+    grid: [{height:'250px'},gridOptions.grid],
     series: [
       {
         name: "parallel",
@@ -97,6 +95,7 @@ const DataOverview = (props) => {
         lineStyle: {
           width: 1,
           opacity: 0.3,
+          color:'#8EA8BA'
         },
         data: props.parallelData.values,
       },
@@ -122,7 +121,7 @@ const DataOverview = (props) => {
     <div
       className="chart"
       id="overview"
-      style={{ width: "100%", height: "1000px" }}
+      style={{ width: "100%", height: "100%" }}
     />
   );
 };

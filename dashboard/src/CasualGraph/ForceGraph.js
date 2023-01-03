@@ -24,7 +24,7 @@ export function ForceGraph(props) {
         {
           selector: 'node',
           style: {
-            'background-color': '#11479e',
+            'background-color': '#8EA8BA',
             label: 'data(label)'
           }
         },
@@ -34,8 +34,8 @@ export function ForceGraph(props) {
           style: {
             'width': 4,
             'target-arrow-shape': 'triangle',
-            'line-color': '#9dbaea',
-            'target-arrow-color': '#9dbaea',
+            'line-color': '#CCCCCC',
+            'target-arrow-color': '#CCCCCC',
             'curve-style': 'bezier'
           }
         }

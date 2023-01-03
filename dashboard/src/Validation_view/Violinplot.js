@@ -172,13 +172,13 @@ class ViolinPlot extends Component {
                 pathData: pathData + pathData2,
               },
               style: api.style({
-                fill: api.visual("color"),
-                stroke: "#428EEE",
+                fill: '#8EA8BA',
+                stroke: "#8EA8BA",
                 lineWidth: 1,
               }),
               styleEmphasis: api.style({
-                fill: d3.color(api.visual("color")).darker(0.05),
-                stroke: d3.color("#428EEE").darker(0.05),
+                fill: d3.color("#FF9B4A").darker(0.05),
+                stroke: d3.color("#FF9B4A").darker(0.05),
                 lineWidth: 1,
               }),
             };

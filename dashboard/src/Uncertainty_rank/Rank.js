@@ -6,6 +6,7 @@ import { drawViolinPlot } from "./ListRank";
 import { drawScatterPlot } from "./ListRank";
 import { drawHeatmap } from "./ListRank";
 import { useEffect } from "react";
+import './Rank.css'
 // import { scaleLinear } from 'd3-scale';
 import * as d3 from "d3";
 // import ViolinPlot from "../Validation_view/Violinplot";
@@ -66,36 +67,14 @@ export function Rank({
     //imaginability(categorical) -> impact(numerical)
     // tangibilithy(categorical) -> sympathy(categorical)
     <>
-      <svg height={50} width={500}>
-        <g transform={`translate(${x}, ${y * id})`}>
-          <rect
-            x="0"
-            y="-5"
-            width={250}
-            height="35"
-            stroke="grey"
-            stroke-width="2"
-            fill="white"
-            onClick={() =>todo()}
-            // onClick={() => typehandler(source_type, src_idx,trg_type,trg_idx)}
-          ></rect>
-          <text x="3" y="10">
-            {/* {type.type} */}
-            {source}
-          </text>
+      <div className="rank-box" onClick={() =>todo()}>
+        <div className="rank-box-title">
+          <span title={`${source}`}>{source}</span>
           <Arrow x1={0} x2={50} y1={10} y2={10}></Arrow>
-          <text x="170" y="10">
-            {target}
-          </text>
-          <FrontBar
-            {...{
-              xScale,
-              barHeight,
-              data,
-            }}
-          ></FrontBar>
-        </g>
-      </svg>
+          <span title={`${target}`}>{target}</span>
+        </div>
+        <div className="rank-box-bar" style={{width: `${xScale(data)}%`}}></div>
+      </div>
     </>
   );
 }

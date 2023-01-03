@@ -45,8 +45,8 @@ export const Renderer = ({ width, height, data, setHoveredCell }) => {
     }
   //color range
   let myColor = d3.scaleLinear()
-  .range(["#ffffff","#9fc5e8" ])
-  .domain([1,100])
+  .range(["#ffffff","#FF9B4A" ])
+  .domain([1,5])
     return (
       <rect
         key={i}
