@@ -16,6 +16,7 @@ import DataOverview from "./DataOverview/Dataoverview";
 import { TypeContext } from "./TypeContext";
 import System from "./system.svg";
 import Overview from "./overview.png";
+import {Dropdown} from "./DataOverview/Dropdown";
 export default function AutoGrid() {
   const [loaded, setloaded] = useState(false);
   const [data, setdata] = useState();
@@ -24,17 +25,20 @@ export default function AutoGrid() {
   const [source, setSource] = useState();
   const [target, setTarget] = useState();
   const [change,setChange] = useState(false)
+  const [table,setTable] = useState("charity")
+  const [dataChange,setDataChange] = useState(false)
   useEffect(() => {
-    loadData();
+    loadData(table);
   }, []);
   console.log("re-render");
-  const loadData = async () => {
+  const loadData = async (filename) => {
+    const body = filename.concat(".csv")
     const dataResponse = await fetch("http://127.0.0.1:5000/get_data", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ file_name: "charity.csv" }),
+      body: JSON.stringify({ file_name: body }),
     });
     const dataJson = await dataResponse.json();
 
@@ -88,10 +92,9 @@ export default function AutoGrid() {
       graph: graphJson,
       rank: rankJson,
     });
-
+    setDataChange(!dataChange)
     setloaded(true);
   };
-  // let validationData = [];
   let tmp = [];
   let prevIndex=-1,prevIndex1=-1
   function getSource(index, index1) {
@@ -134,10 +137,12 @@ export default function AutoGrid() {
               <div className="box-title">
                 <img className="logo" src={Overview} alt="" />
                 Data Overview
+                <Dropdown key={table}table={table} tableHandler={loadData} />
               </div>
+              
               <div className="divider"></div>
               <div className="box-content">
-                <DataOverview parallelData={data.data} dimData={data.dimReduction}></DataOverview>
+                <DataOverview key={dataChange} parallelData={data.data} dimData={data.dimReduction}></DataOverview>
               </div>
             </div>
             <div className="box">
@@ -147,7 +152,7 @@ export default function AutoGrid() {
               </div>
               <div className="divider"></div>
               <div className="box-content">
-                <ForceGraph data={data.graph} />
+                <ForceGraph key={dataChange} data={data.graph} />
               </div>
             </div>
             <div>
@@ -158,7 +163,7 @@ export default function AutoGrid() {
                 </div>
                 <div className="divider"></div>
                 <div className="half-box-content">
-                  <TypeContext.Provider value={{ type, setType }}>
+                  <TypeContext.Provider key={dataChange} value={{ type, setType }}>
                     <ListRanks
                       data={data.rank}
                       typehandler={getSource}
