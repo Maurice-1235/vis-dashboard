@@ -42,7 +42,7 @@ class ViolinPlot extends Component {
     // const dataSource = columns.map((date) =>
     //   data.filter((item) => item.date === date).map((item) => item.value)
     // );
-    console.log(columns)
+    console.log("columns",columns)
     console.log(dataSource)
     const tooltipData = echarts.dataTool.prepareBoxplotData(dataSource);
     const { boxData } = tooltipData;
@@ -142,6 +142,7 @@ class ViolinPlot extends Component {
             const liner = d3
               .scaleLinear()
               .domain([min-1, max+1 ])//domain
+              // .range([min,max])
               .ticks(100);//tick
             const density = kernelDensityEstimator(
               kernelEpanechnikov(1),//kernel

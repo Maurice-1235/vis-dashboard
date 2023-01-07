@@ -7,7 +7,6 @@ import GTranslateIcon from "@mui/icons-material/GTranslate";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { ForceGraph } from "./CasualGraph/ForceGraph";
 import { useState, useEffect } from "react";
-// import { Heatmap } from "./Validation_view/Heatmap/Heatmap";
 import Heatmap from "./Validation_view/Heatmap";
 import { Scatterplot } from "./Validation_view/Scatterplot/Scatterplot";
 import { graphData } from "./CasualGraph/ForceGraph";
@@ -19,6 +18,7 @@ import System from "./system.svg";
 import Overview from "./overview.png";
 import { Dropdown } from "./DataOverview/Dropdown";
 import { IconButton, Tooltip } from "@mui/material";
+
 export default function AutoGrid() {
   const [loaded, setloaded] = useState(false);
   const [data, setdata] = useState();
@@ -65,10 +65,7 @@ export default function AutoGrid() {
         selected_id: [
           0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
           20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
-          37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53,
-          54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70,
-          71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87,
-          88, 89, 90, 91, 92, 93,
+          37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
         ],
       }),
     });
@@ -123,13 +120,13 @@ export default function AutoGrid() {
     //     });
     //   }
     // } else {
-      for (let x = 0; x < data.data.values.length; x++) {
-        tmp.push({
-          x: String(data.data.values[x][index]),
-          y: String(data.data.values[x][index1]),
-          value: String(data.data.values[x][index1]),
-        });
-      }
+    for (let x = 0; x < data.data.values.length; x++) {
+      tmp.push({
+        x: String(data.data.values[x][index]),
+        y: String(data.data.values[x][index1]),
+        value: String(data.data.values[x][index1]),
+      });
+    }
     // }
 
     setValidationData(tmp);
@@ -227,8 +224,9 @@ export default function AutoGrid() {
                       trg_name={target}
                       changeHandler={setChange}
                     ></ViolinPlot>
-                  ) : //   <Scatterplot
-                  //   key ={change}
+                  ) : // <Violin width={300} height={300} data={validationData} />
+                  // <Scatterplot
+                  //   key={change}
                   //   data={validationData}
                   //   src_name={source}
                   //   trg_name={target}
@@ -236,17 +234,14 @@ export default function AutoGrid() {
                   //   height={300}
                   //   changeHandler={setChange}
                   // ></Scatterplot>
+                  //
                   type == "heatmap" ? (
-                    // <Heatmap
-                    //   key={change}
-                    //   data={validationData}
-                    //   src_name={source}
-                    //   trg_name={target}
-                    //   width={400}
-                    //   height={300}
-                    //   changeHandler={setChange}
-                    // ></Heatmap>
-                    <Heatmap data={validationData}src_name={source} trg_name={target}></Heatmap>
+                    <Heatmap
+                      key={change}
+                      data={validationData}
+                      src_name={source}
+                      trg_name={target}
+                    ></Heatmap>
                   ) : (
                     type == "scatterplot" && (
                       <Scatterplot

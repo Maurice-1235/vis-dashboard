@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import echarts from "../../node_modules/echarts/lib/echarts";
-
 export default function Heatmap({ data,src_name,trg_name }) {
   // console.log("data for heatmap is",data)
   let xValue = [];
@@ -39,7 +38,10 @@ export default function Heatmap({ data,src_name,trg_name }) {
       },
       grid: {
         height: "50%",
-        top: "10%",
+        top: "15%",
+        right:"5%",
+        left:"5%",
+
       },
       xAxis: {
         type: "category",
@@ -53,11 +55,8 @@ export default function Heatmap({ data,src_name,trg_name }) {
           color:"black",
           align: 'right',
           verticalAlign: 'top',
-          /**
-           * the top padding will shift the name down so that it does not overlap with the axis-labels
-           * t-l-b-r
-           */
-          padding: [20, 0, 0, 0],
+          fontFamily:'sans-serif',
+          padding: [15, 0, 0, 0],
         },
       },
       yAxis: {
@@ -70,7 +69,9 @@ export default function Heatmap({ data,src_name,trg_name }) {
         nameTextStyle: {
           fontSize:15,
           color: "black",
-          padding: [40, 25, 0, 0],
+          padding: [20, 10, 0, 0],
+          fontFamily:'sans-serif',
+          align:'left'
         },
       },
       visualMap: {

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import { Rank } from "./Rank";
 import { graphData } from "../CasualGraph/ForceGraph";
-import { Scatterplot } from "../Validation_view/Scatterplot/Scatterplot";
-import { Heatmap } from "../Validation_view/Heatmap/Heatmap";
 
 // import ViolinPlot from "../Validation_view/Violinplot";
 // let data = require("../CasualGraph/ForceGraph")

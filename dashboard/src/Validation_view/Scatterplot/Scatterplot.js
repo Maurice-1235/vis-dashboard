@@ -1,17 +1,16 @@
 import * as d3 from "d3";
-import styles from "./scatterplot.module.css";
 import { AxisLeft } from "./AxisLeft";
 import { AxisBottom } from "./AxisBottom";
-import { useState } from "react";
-import React from "react";
+import "./scatterplot.css"
+import React, { useState } from "react";
+import { Tooltip } from "./Tooltip";
 
-const margin = { top: 0, right: 60, bottom: 90, left: 90 };
+const margin = { top: 40, right: 20, bottom: 90, left: 90 };
 
 export const Scatterplot = ({ width, height, data, src_name, trg_name }) => {
-  // Layout. The div size is set by the given props.
-  // The bounds (=area inside the axis) is calculated by substracting the margins
-  const boundsWidth = width - margin.right - margin.left;
-  const boundsHeight = height - margin.top - margin.bottom;
+  const [hovered, setHovered] = useState(null)
+  const boundsWidth = width - margin.right - margin.left-30;
+  const boundsHeight = height - margin.top - margin.bottom-10;
 
   // Scales
   const yScale = d3.scaleLinear().domain([0, 10]).range([boundsHeight, 0]);
@@ -29,7 +28,15 @@ export const Scatterplot = ({ width, height, data, src_name, trg_name }) => {
         stroke="#8EA8BA"
         fill="#8EA8BA"
         fillOpacity={0.5}
-        strokeWidth={2}
+        strokeWidth={1}
+        onMouseEnter={() =>
+          setHovered({
+            xPos: xScale(d.x),
+            yPos: yScale(d.y),
+            name: d.x+d.y,
+          })
+        }
+        onMouseLeave={() => setHovered(null)}
       />
     );
   });
@@ -37,7 +44,7 @@ export const Scatterplot = ({ width, height, data, src_name, trg_name }) => {
   return (
     <div>
       <svg width={width} height={height}>
-        {/* first group is for the violin and box shapes */}
+
         <g
           width={boundsWidth}
           height={boundsHeight}
@@ -55,16 +62,30 @@ export const Scatterplot = ({ width, height, data, src_name, trg_name }) => {
             />
           </g>
           {/* label */}
-          <text x={width / 2} y={240} textAnchor="middle">
+          <text x={240} y={200} textAnchor="middle" className="axis">
             {src_name}
           </text>
-          <text x={-30} y={30} textAnchor="middle">
+          <text x={-35} y={-10} textAnchor="middle" className="axis">
             {trg_name}
           </text>
           {/* Circles */}
           {allShapes}
         </g>
       </svg>
+      <div
+        style={{
+          width: boundsWidth,
+          height: boundsHeight,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          pointerEvents: "none",
+          marginLeft: margin.left,
+          marginTop: margin.top,
+        }}
+      >
+        <Tooltip interactionData={hovered} />
+      </div>
     </div>
   );
 };

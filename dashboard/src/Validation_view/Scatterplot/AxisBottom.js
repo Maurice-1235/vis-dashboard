@@ -39,7 +39,7 @@ export const AxisBottom = ({
           <text
             key={value}
             style={{
-              fontSize: "10px",
+              fontSize: "12px",
               textAnchor: "middle",
               transform: "translateY(20px)",
               fill: "#000000",
