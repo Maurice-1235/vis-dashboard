@@ -28,7 +28,7 @@ export const AxisLeft = ({ yScale, pixelsPerTick, width }) => {
           <line
             x1={-tick}
             x2={width + tick}
-            stroke="#D2D7D3"
+            stroke="#000000"
             strokeWidth={0.5}
           />
           <text
@@ -37,7 +37,7 @@ export const AxisLeft = ({ yScale, pixelsPerTick, width }) => {
               fontSize: "10px",
               textAnchor: "middle",
               transform: "translateX(-20px)",
-              fill: "#D2D7D3",
+              fill: "#000000",
             }}
           >
             {value}

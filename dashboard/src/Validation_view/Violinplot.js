@@ -75,6 +75,8 @@ class ViolinPlot extends Component {
         boundaryGap: true,
         nameLocation: 'end',
         nameTextStyle: {
+          fontSize:15,
+          color:"black",
           align: 'right',
           verticalAlign: 'top',
           /**
@@ -88,7 +90,7 @@ class ViolinPlot extends Component {
           show: false,
         },
         axisLabel: {
-          color: "#999",
+          color: "black",
         },
         splitLine: {
           show: false,
@@ -107,7 +109,8 @@ class ViolinPlot extends Component {
         name: this.props.trg_name,
         type: "value",
         nameTextStyle: {
-          color: "#999",
+          fontSize:15,
+          color: "black",
           padding: [40, 40, 0, 0],
         },
         axisLine: {
@@ -122,7 +125,7 @@ class ViolinPlot extends Component {
           },
         },
         axisLabel: {
-          color: "#999",
+          color: "black",
         },
       },
       series: [
@@ -208,7 +211,7 @@ class ViolinPlot extends Component {
       <div
         className="chart"
         ref={this.chartRef}
-        style={{ width: "500px", height: "250px" }}
+        style={{ width: "500px", height: "270px" }}
       />
     );
   }

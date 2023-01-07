@@ -7,7 +7,8 @@ import GTranslateIcon from "@mui/icons-material/GTranslate";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { ForceGraph } from "./CasualGraph/ForceGraph";
 import { useState, useEffect } from "react";
-import { Heatmap } from "./Validation_view/Heatmap/Heatmap";
+// import { Heatmap } from "./Validation_view/Heatmap/Heatmap";
+import Heatmap from "./Validation_view/Heatmap";
 import { Scatterplot } from "./Validation_view/Scatterplot/Scatterplot";
 import { graphData } from "./CasualGraph/ForceGraph";
 import { ListRanks } from "./Uncertainty_rank/ListRank";
@@ -16,7 +17,7 @@ import DataOverview from "./DataOverview/Dataoverview";
 import { TypeContext } from "./TypeContext";
 import System from "./system.svg";
 import Overview from "./overview.png";
-import {Dropdown} from "./DataOverview/Dropdown";
+import { Dropdown } from "./DataOverview/Dropdown";
 export default function AutoGrid() {
   const [loaded, setloaded] = useState(false);
   const [data, setdata] = useState();
@@ -24,15 +25,15 @@ export default function AutoGrid() {
   const [validationData, setValidationData] = useState([]);
   const [source, setSource] = useState();
   const [target, setTarget] = useState();
-  const [change,setChange] = useState(false)
-  const [table,setTable] = useState("charity")
-  const [dataChange,setDataChange] = useState(false)
+  const [change, setChange] = useState(false);
+  const [table, setTable] = useState("charity");
+  const [dataChange, setDataChange] = useState(false);
   useEffect(() => {
     loadData(table);
   }, []);
   console.log("re-render");
   const loadData = async (filename) => {
-    const body = filename.concat(".csv")
+    const body = filename.concat(".csv");
     const dataResponse = await fetch("http://127.0.0.1:5000/get_data", {
       method: "POST",
       headers: {
@@ -60,9 +61,12 @@ export default function AutoGrid() {
       },
       body: JSON.stringify({
         selected_id: [
-          0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36,
-          38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70,
-          72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92,
+          0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+          20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
+          37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53,
+          54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70,
+          71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87,
+          88, 89, 90, 91, 92, 93,
         ],
       }),
     });
@@ -92,23 +96,40 @@ export default function AutoGrid() {
       graph: graphJson,
       rank: rankJson,
     });
-    setDataChange(!dataChange)
+    setDataChange(!dataChange);
     setloaded(true);
   };
   let tmp = [];
-  let prevIndex=-1,prevIndex1=-1
+  let prevIndex = -1,
+    prevIndex1 = -1;
   function getSource(index, index1) {
     console.log(index, index1);
-    if(index!==prevIndex||index1!==prevIndex1||(prevIndex==-1&&prevIndex1==-1))
-      setChange(!change)
+    if (
+      index !== prevIndex ||
+      index1 !== prevIndex1 ||
+      (prevIndex == -1 && prevIndex1 == -1)
+    )
+      setChange(!change);
     setSource(graphData[index]);
     setTarget(graphData[index1]);
-    for (let x = 0; x < data.data.values.length; x++) {
-      tmp.push({
-        x: String(data.data.values[x][index]),
-        y: String(data.data.values[x][index1]),
-      });
-    }
+    // if (type === "heatmap") {
+    //   for (let x = 0; x < data.data.values.length; x++) {
+    //     tmp.push({
+    //       x: String(data.data.values[x][index]),
+    //       y: String(data.data.values[x][index1]),
+    //       value: String(data.data.values[x][index1]),
+    //     });
+    //   }
+    // } else {
+      for (let x = 0; x < data.data.values.length; x++) {
+        tmp.push({
+          x: String(data.data.values[x][index]),
+          y: String(data.data.values[x][index1]),
+          value: String(data.data.values[x][index1]),
+        });
+      }
+    // }
+
     setValidationData(tmp);
     console.log(validationData);
     console.log(type);
@@ -137,12 +158,16 @@ export default function AutoGrid() {
               <div className="box-title">
                 <img className="logo" src={Overview} alt="" />
                 Data Overview
-                <Dropdown key={table}table={table} tableHandler={loadData} />
+                <Dropdown key={table} table={table} tableHandler={loadData} />
               </div>
-              
+
               <div className="divider"></div>
               <div className="box-content">
-                <DataOverview key={dataChange} parallelData={data.data} dimData={data.dimReduction}></DataOverview>
+                <DataOverview
+                  key={dataChange}
+                  parallelData={data.data}
+                  dimData={data.dimReduction}
+                ></DataOverview>
               </div>
             </div>
             <div className="box">
@@ -163,7 +188,10 @@ export default function AutoGrid() {
                 </div>
                 <div className="divider"></div>
                 <div className="half-box-content">
-                  <TypeContext.Provider key={dataChange} value={{ type, setType }}>
+                  <TypeContext.Provider
+                    key={dataChange}
+                    value={{ type, setType }}
+                  >
                     <ListRanks
                       data={data.rank}
                       typehandler={getSource}
@@ -178,29 +206,39 @@ export default function AutoGrid() {
                 </div>
                 <div className="divider"></div>
                 <div className="half-box-content">
-                  {type}
-                  {(type == "violin")? (
+                  {/* {type} */}
+                  {type == "violin" ? (
                     <ViolinPlot
-                      key = {change}
+                      key={change}
                       data={validationData}
                       src_name={source}
                       trg_name={target}
                       changeHandler={setChange}
                     ></ViolinPlot>
-                  ) : (type == "heatmap") ? (
-                    <Heatmap
-                      key = {change}
-                      data={validationData}
-                      src_name={source}
-                      trg_name={target}
-                      width={400}
-                      height={300}
-                      changeHandler={setChange}
-                    ></Heatmap>
+                  ) : //   <Scatterplot
+                  //   key ={change}
+                  //   data={validationData}
+                  //   src_name={source}
+                  //   trg_name={target}
+                  //   width={400}
+                  //   height={300}
+                  //   changeHandler={setChange}
+                  // ></Scatterplot>
+                  type == "heatmap" ? (
+                    // <Heatmap
+                    //   key={change}
+                    //   data={validationData}
+                    //   src_name={source}
+                    //   trg_name={target}
+                    //   width={400}
+                    //   height={300}
+                    //   changeHandler={setChange}
+                    // ></Heatmap>
+                    <Heatmap data={validationData}src_name={source} trg_name={target}></Heatmap>
                   ) : (
-                    (type == "scatterplot") &&(
+                    type == "scatterplot" && (
                       <Scatterplot
-                        key ={change}
+                        key={change}
                         data={validationData}
                         src_name={source}
                         trg_name={target}

@@ -1,79 +1,118 @@
 import React, { useEffect, useRef } from "react";
 import echarts from "../../node_modules/echarts/lib/echarts";
 
-
-
-export default function Heatmap() {
-  const chartRef = useRef(null)
+export default function Heatmap({ data,src_name,trg_name }) {
+  // console.log("data for heatmap is",data)
+  let xValue = [];
+  let yValue = [];
+  console.log(data.length);
+  for (let x = 0; x < data.length; x++) {
+    xValue.indexOf(data[x].x) === -1
+      ? xValue.push(data[x].x)
+      : console.log("changed");
+    yValue.indexOf(data[x].y) === -1 ? yValue.push(data[x].y) : console.log(1);
+  }
+  xValue.sort();
+  yValue.sort();
+  // console.log(xValue.length)
+  // console.log(yValue)
+  let array = Array(Math.max(xValue[xValue.length - 1] + 1))
+    .fill()
+    .map(() => Array(Math.max(yValue[yValue.length - 1]) + 1).fill(0));
+  for (let x = 0; x < data.length; x++) {
+    // console.log(data[x].x,data[x].y)
+    array[data[x].x][data[x].y]++;
+  }
+  // console.log(array)
+  let data1 = [];
+  for (let x = 0; x < data.length; x++) {
+    data1.push([data[x].x, data[x].y, array[data[x].x][data[x].y]]);
+  }
+  // console.log(data1)
+  const chartRef = useRef(null);
   const draw = () => {
-    // this.props.changeHandler(false)
-    console.log(this.props.src_name)
-    console.log(this.props.trg_name)
-    console.log(this.props.data)
-  
-
-    const myChart = echarts.init(this.chartRef.current);
+    const myChart = echarts.init(chartRef.current);
 
     const option = {
       tooltip: {
-        position: 'top'
+        position: "top",
       },
       grid: {
-        height: '50%',
-        top: '10%'
+        height: "50%",
+        top: "10%",
       },
       xAxis: {
-        type: 'category',
-        data: [],
+        type: "category",
+        name:src_name,
+        data: xValue,
         splitArea: {
-          show: true
-        }
+          show: true,
+        },
+        nameTextStyle: {
+          fontSize:15,
+          color:"black",
+          align: 'right',
+          verticalAlign: 'top',
+          /**
+           * the top padding will shift the name down so that it does not overlap with the axis-labels
+           * t-l-b-r
+           */
+          padding: [20, 0, 0, 0],
+        },
       },
       yAxis: {
-        type: 'category',
-        data: [],
+        type: "category",
+        name:trg_name,
+        data: yValue,
         splitArea: {
-          show: true
-        }
+          show: true,
+        },
+        nameTextStyle: {
+          fontSize:15,
+          color: "black",
+          padding: [40, 25, 0, 0],
+        },
       },
       visualMap: {
         min: 0,
-        max: 10,
+        max: 15,
         calculable: true,
-        orient: 'horizontal',
-        left: 'center',
-        bottom: '15%'
+        orient: "horizontal",
+        left: "center",
+        bottom: "15%",
+        inRange: {
+          color: ["#FFFFFF", "#8EA8BA"], //From smaller to bigger value ->
+        },
       },
       series: [
         {
-          type: 'heatmap',
-          data: [],
+          type: "heatmap",
+          data: data1,
           label: {
-            show: true
+            show: true,
           },
           emphasis: {
             itemStyle: {
               shadowBlur: 10,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          }
-        }
-      ]
+              shadowColor: "rgba(0, 0, 0, 0.5)",
+            },
+          },
+        },
+      ],
     };
 
     myChart.setOption(option);
   };
 
   useEffect(() => {
-    draw()
-  }, [])
+    draw();
+  }, []);
 
   return (
     <div
       className="chart"
       ref={chartRef}
-      style={{ width: "500px", height: "250px" }}
+      style={{ width: "450px", height: "300px" }}
     />
   );
 }
-

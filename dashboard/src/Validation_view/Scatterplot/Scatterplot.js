@@ -26,9 +26,9 @@ export const Scatterplot = ({ width, height, data, src_name, trg_name }) => {
         cx={xScale(d.y)}
         cy={yScale(d.x)}
         opacity={1}
-        stroke="#b0c8ed"
-        fill="#b0c8ed"
-        fillOpacity={0.2}
+        stroke="#8EA8BA"
+        fill="#8EA8BA"
+        fillOpacity={0.5}
         strokeWidth={2}
       />
     );
