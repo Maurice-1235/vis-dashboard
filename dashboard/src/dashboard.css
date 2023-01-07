@@ -132,8 +132,8 @@ body{
     height: 30px;
 }
 .half-box .half-box-content{
-    height: calc((100vh - 140px));
-    overflow-y: auto;
+    height: calc((100vh - 270px)/2);
+    overflow-y: scroll;
     overflow-x: hidden;
     margin-bottom: 15px;
     

@@ -16,7 +16,8 @@ import DataOverview from "./DataOverview/Dataoverview";
 import { TypeContext } from "./TypeContext";
 import System from "./system.svg";
 import Overview from "./overview.png";
-import {Dropdown} from "./DataOverview/Dropdown";
+import { Dropdown } from "./DataOverview/Dropdown";
+import { IconButton, Tooltip } from "@mui/material";
 export default function AutoGrid() {
   const [loaded, setloaded] = useState(false);
   const [data, setdata] = useState();
@@ -24,15 +25,16 @@ export default function AutoGrid() {
   const [validationData, setValidationData] = useState([]);
   const [source, setSource] = useState();
   const [target, setTarget] = useState();
-  const [change,setChange] = useState(false)
-  const [table,setTable] = useState("charity")
-  const [dataChange,setDataChange] = useState(false)
+  const [change, setChange] = useState(false);
+  const [table, setTable] = useState("charity");
+  const [dataChange, setDataChange] = useState(false);
   useEffect(() => {
     loadData(table);
   }, []);
   console.log("re-render");
+  // let prevData;
   const loadData = async (filename) => {
-    const body = filename.concat(".csv")
+    const body = filename.concat(".csv");
     const dataResponse = await fetch("http://127.0.0.1:5000/get_data", {
       method: "POST",
       headers: {
@@ -60,9 +62,9 @@ export default function AutoGrid() {
       },
       body: JSON.stringify({
         selected_id: [
-          0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36,
-          38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70,
-          72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92,
+          0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+          20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
+          37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
         ],
       }),
     });
@@ -92,15 +94,28 @@ export default function AutoGrid() {
       graph: graphJson,
       rank: rankJson,
     });
-    setDataChange(!dataChange)
+    // console.log(data)
+    // console.log("prevdara is",prevData);
+    // if(JSON.stringify(prevData) === JSON.stringify(data)){
+    //   console.log("data changed")
+    // }
+    // else{
+    //   console.log("data is different")
+    // }
+    setDataChange(!dataChange);
     setloaded(true);
   };
   let tmp = [];
-  let prevIndex=-1,prevIndex1=-1
+  let prevIndex = -1,
+    prevIndex1 = -1;
   function getSource(index, index1) {
     console.log(index, index1);
-    if(index!==prevIndex||index1!==prevIndex1||(prevIndex==-1&&prevIndex1==-1))
-      setChange(!change)
+    if (
+      index !== prevIndex ||
+      index1 !== prevIndex1 ||
+      (prevIndex == -1 && prevIndex1 == -1)
+    )
+      setChange(!change);
     setSource(graphData[index]);
     setTarget(graphData[index1]);
     for (let x = 0; x < data.data.values.length; x++) {
@@ -113,6 +128,7 @@ export default function AutoGrid() {
     console.log(validationData);
     console.log(type);
   }
+  // prevData = data;
 
   return (
     <>
@@ -120,29 +136,42 @@ export default function AutoGrid() {
         <>
           <div className="header">
             <div className="icon">
-              <img className="logo" src={System} alt="" />
+              <a href="/">
+                <img className="logo" src={System} alt="" />
+              </a>
+              {/* <img className="logo" src={System} alt="" /> */}
               <span>CasualLens</span>
             </div>
-            <GTranslateIcon
-              className="translate"
-              fontSize="medium"
-            ></GTranslateIcon>
-            <HelpOutlineIcon
-              className="help"
-              fontSize="medium"
-            ></HelpOutlineIcon>
+            <IconButton color="info" sx={{ ml: "80%" }}>
+              <GTranslateIcon
+                // className="translate"
+                fontSize="medium"
+              ></GTranslateIcon>
+            </IconButton>
+            <Tooltip title="可视化大作业！">
+              <IconButton color="info">
+                <HelpOutlineIcon
+                  // className="help"
+                  fontSize="medium"
+                ></HelpOutlineIcon>
+              </IconButton>
+            </Tooltip>
           </div>
           <div className="container">
             <div className="box">
               <div className="box-title">
                 <img className="logo" src={Overview} alt="" />
                 Data Overview
-                <Dropdown key={table}table={table} tableHandler={loadData} />
+                <Dropdown key={table} table={table} tableHandler={loadData} />
               </div>
-              
+
               <div className="divider"></div>
               <div className="box-content">
-                <DataOverview key={dataChange} parallelData={data.data} dimData={data.dimReduction}></DataOverview>
+                <DataOverview
+                  key={dataChange}
+                  parallelData={data.data}
+                  dimData={data.dimReduction}
+                ></DataOverview>
               </div>
             </div>
             <div className="box">
@@ -163,7 +192,10 @@ export default function AutoGrid() {
                 </div>
                 <div className="divider"></div>
                 <div className="half-box-content">
-                  <TypeContext.Provider key={dataChange} value={{ type, setType }}>
+                  <TypeContext.Provider
+                    key={dataChange}
+                    value={{ type, setType }}
+                  >
                     <ListRanks
                       data={data.rank}
                       typehandler={getSource}
@@ -179,17 +211,17 @@ export default function AutoGrid() {
                 <div className="divider"></div>
                 <div className="half-box-content">
                   {type}
-                  {(type == "violin")? (
+                  {type == "violin" ? (
                     <ViolinPlot
-                      key = {change}
+                      key={change}
                       data={validationData}
                       src_name={source}
                       trg_name={target}
                       changeHandler={setChange}
                     ></ViolinPlot>
-                  ) : (type == "heatmap") ? (
+                  ) : type == "heatmap" ? (
                     <Heatmap
-                      key = {change}
+                      key={change}
                       data={validationData}
                       src_name={source}
                       trg_name={target}
@@ -198,9 +230,9 @@ export default function AutoGrid() {
                       changeHandler={setChange}
                     ></Heatmap>
                   ) : (
-                    (type == "scatterplot") &&(
+                    type == "scatterplot" && (
                       <Scatterplot
-                        key ={change}
+                        key={change}
                         data={validationData}
                         src_name={source}
                         trg_name={target}

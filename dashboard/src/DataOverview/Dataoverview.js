@@ -36,7 +36,7 @@ const DataOverview = (props) => {
     color: '#8EA8BA',
     toolbox: {
       left: "60%",
-      bottom: "95%",
+      bottom: "90%",
       feature: {
         dataView: {
           readOnly: false,
