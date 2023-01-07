@@ -1,0 +1,9 @@
+.dropdown{
+    width:90%;
+    margin-left:100px;
+    margin-top: 50px;
+    display: flex;
+    height:30px;
+    /* height:80%; */
+    /* height:fit-content; */
+}

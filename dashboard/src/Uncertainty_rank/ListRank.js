@@ -12,7 +12,7 @@ export let drawViolinPlot = false;
 export let drawHeatmap = false;
 export let drawScatterPlot = false;
 function test() {
-  console.log(graphData);
+  // console.log(graphData);
 }
 export function ListRanks(props) {
   const [data, setData] = useState([]);
@@ -25,7 +25,7 @@ export function ListRanks(props) {
     const rank = async (id) => {
       const json = props.data;
       edgeCount = json.length;
-      console.log("connections are", graphData, graphData.length);
+      // console.log("connections are", graphData, graphData.length);
       setGraphlinks(graphData);
       for (let x = 0; x < edgeCount; x++) {
         edges.push({
@@ -40,9 +40,9 @@ export function ListRanks(props) {
           id: x + 1,
         });
 
-        console.log(graphData);
-        console.log("graphdata", graphData.length);
-        console.log("edges", edges);
+        // console.log(graphData);
+        // console.log("graphdata", graphData.length);
+        // console.log("edges", edges);
       }
 
       setData(edges);

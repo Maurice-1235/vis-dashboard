@@ -18,6 +18,7 @@ import { TypeContext } from "./TypeContext";
 import System from "./system.svg";
 import Overview from "./overview.png";
 import { Dropdown } from "./DataOverview/Dropdown";
+import { IconButton, Tooltip } from "@mui/material";
 export default function AutoGrid() {
   const [loaded, setloaded] = useState(false);
   const [data, setdata] = useState();
@@ -32,6 +33,7 @@ export default function AutoGrid() {
     loadData(table);
   }, []);
   console.log("re-render");
+  // let prevData;
   const loadData = async (filename) => {
     const body = filename.concat(".csv");
     const dataResponse = await fetch("http://127.0.0.1:5000/get_data", {
@@ -134,6 +136,7 @@ export default function AutoGrid() {
     console.log(validationData);
     console.log(type);
   }
+  // prevData = data;
 
   return (
     <>
@@ -141,17 +144,26 @@ export default function AutoGrid() {
         <>
           <div className="header">
             <div className="icon">
-              <img className="logo" src={System} alt="" />
+              <a href="/">
+                <img className="logo" src={System} alt="" />
+              </a>
+              {/* <img className="logo" src={System} alt="" /> */}
               <span>CasualLens</span>
             </div>
-            <GTranslateIcon
-              className="translate"
-              fontSize="medium"
-            ></GTranslateIcon>
-            <HelpOutlineIcon
-              className="help"
-              fontSize="medium"
-            ></HelpOutlineIcon>
+            <IconButton color="info" sx={{ ml: "80%" }}>
+              <GTranslateIcon
+                // className="translate"
+                fontSize="medium"
+              ></GTranslateIcon>
+            </IconButton>
+            <Tooltip title="可视化大作业！">
+              <IconButton color="info">
+                <HelpOutlineIcon
+                  // className="help"
+                  fontSize="medium"
+                ></HelpOutlineIcon>
+              </IconButton>
+            </Tooltip>
           </div>
           <div className="container">
             <div className="box">
