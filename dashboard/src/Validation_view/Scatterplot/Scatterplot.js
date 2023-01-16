@@ -33,7 +33,7 @@ export const Scatterplot = ({ width, height, data, src_name, trg_name }) => {
           setHovered({
             xPos: xScale(d.x),
             yPos: yScale(d.y),
-            name: d.x+d.y,
+            name: "x:"+d.x+" "+"y:"+d.y,
           })
         }
         onMouseLeave={() => setHovered(null)}
