@@ -36,7 +36,7 @@ export default function AutoGrid() {
   // let prevData;
   const loadData = async (filename) => {
     const body = filename.concat(".csv");
-    const dataResponse = await fetch("http://127.0.0.1:5000/get_data", {
+    const dataResponse = await fetch("/get_data", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export default function AutoGrid() {
     const dataJson = await dataResponse.json();
 
     const dimReductionResponse = await fetch(
-      "http://127.0.0.1:5000/get_dim_reduction",
+      "/get_dim_reduction",
       {
         method: "POST",
         headers: {
@@ -56,7 +56,7 @@ export default function AutoGrid() {
     );
     const dimReductionJson = await dimReductionResponse.json();
 
-    const graphResponse = await fetch("http://127.0.0.1:5000/get_graph", {
+    const graphResponse = await fetch("/get_graph", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -72,7 +72,7 @@ export default function AutoGrid() {
     const graphJson = await graphResponse.json();
 
     const rankResponse = await fetch(
-      "http://127.0.0.1:5000/get_uncertainty_rank",
+      "/get_uncertainty_rank",
       {
         method: "POST",
         headers: {

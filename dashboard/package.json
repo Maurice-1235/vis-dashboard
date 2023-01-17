@@ -25,7 +25,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-     "postinstall": "npx patch-package" 
+    "postinstall": "npx patch-package"
   },
   "eslintConfig": {
     "extends": [
@@ -44,5 +44,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://0.0.0.0:5000"
 }
