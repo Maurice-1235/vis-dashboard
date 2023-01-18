@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-// import { runForceGraph } from "./ForceGraphGenerator";
-import { useRef,useEffect } from "react";
+import { useEffect } from "react";
+import { useSelector } from 'react-redux'
+
 import "./ForceGraph.css";
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 cytoscape.use( dagre );
-export let graphData=[]
-export function ForceGraph(props) {
+export default function ForceGraph() {
+  const data = useSelector(state => state.data.graph)
   const [cy, setCy] = useState(null)
   
   useEffect(() => {
@@ -40,46 +41,41 @@ export function ForceGraph(props) {
           }
         }
       ],
-
       elements: [
-
       ]
     });
-    const graph = async () => {
+    setCy(_cy)
+  }, [])
 
-
-      const json = props.data;
+  useEffect(() => {
     
+    const graph = async () => {
+      if (!data) {
+        return
+      }
+      const json = data;
+      cy && cy.remove('node')
+      cy && cy.remove('edge')
       for (let x = 0; x < json.nodes.length; x++) {
-          _cy.add({
+          cy.add({
             data: { id: json.nodes[x].id,
             label:json.nodes[x].name }
           })
-          graphData[json.nodes[x].id] = json.nodes[x].name
       }
-      console.log(graphData,graphData.length)
       for(let x = 0;x<json.links.length;x++){
-        _cy.add({
+        cy.add({
           data:{
             source:json.links[x].source,
             target:json.links[x].target
           }
         })
       }
-      _cy.layout({
+      cy && cy.layout({
         name: 'circle'
     }).run();
     };
-    graph()
-   
-    setCy(_cy)
-    
-    
-  },[])
+    graph()  
+  },[data])
 
   return <div id='cy' />;
 }
-// export function getGraphData(){
-//   console.log("get value",global.graphData.connection)
-//   return global.graphData.connection
-// }
